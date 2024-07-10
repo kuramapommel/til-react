@@ -1,17 +1,30 @@
 import { render, fireEvent, screen } from '@testing-library/react'
-import Login from './Login'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import Login from './LoginPage'
 import { describe, it, expect, vi } from 'vitest'
 
 describe('Login Component', () => {
   it('renders login form', () => {
-    render(<Login />)
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </MemoryRouter>,
+    )
     expect(screen.getByPlaceholderText('ユーザー名')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('パスワード')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'ログイン' })).toBeInTheDocument()
   })
 
   it('submits the form with valid data', () => {
-    render(<Login />)
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </MemoryRouter>,
+    )
     fireEvent.change(screen.getByPlaceholderText('ユーザー名'), {
       target: { value: 'testuser' },
     })
@@ -26,7 +39,13 @@ describe('Login Component', () => {
   })
 
   it('shows validation error with empty fields', () => {
-    render(<Login />)
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </MemoryRouter>,
+    )
     fireEvent.click(screen.getByRole('button', { name: 'ログイン' }))
     expect(screen.getByPlaceholderText('ユーザー名')).toBeInvalid()
     expect(screen.getByPlaceholderText('パスワード')).toBeInvalid()

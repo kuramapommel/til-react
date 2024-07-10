@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 const containerStyle = css`
@@ -49,6 +50,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const schema = z.object({
     username: z.string().min(1, 'ユーザー名は必須です'),
@@ -69,6 +71,8 @@ const Login = () => {
     // ログイン処理
     console.log('Username:', username)
     console.log('Password:', password)
+    // ここで認証処理を行います
+    navigate('/products')
   }
 
   return (
