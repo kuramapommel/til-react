@@ -62,7 +62,7 @@ const Login = () => {
     const result = schema.safeParse({ username, password })
 
     if (!result.success) {
-      setError(result.error.errors.map(err => err.message).join(', '))
+      setError(result.error.errors.map((err) => err.message).join(', '))
       return
     }
 
@@ -92,7 +92,9 @@ const Login = () => {
           css={inputStyle}
           required
         />
-        <button type="submit" css={buttonStyle}>ログイン</button>
+        <button type="submit" css={buttonStyle}>
+          ログイン
+        </button>
       </form>
     </div>
   )

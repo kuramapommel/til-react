@@ -11,5 +11,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
-  </React.StrictMode>
+  </React.StrictMode>,
 )
