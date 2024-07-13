@@ -82,4 +82,32 @@ describe('LoginPage', () => {
     expect(await screen.findByText('価格: 1,000円')).toBeInTheDocument()
     expect(await screen.findByText('価格: 2,000円')).toBeInTheDocument()
   })
+
+  it('should open modal when clicking on "新規作成ボタン" and add a new product', async () => {
+    render(<ProductList />)
+
+    fireEvent.click(screen.getByRole('button', { name: '新規作成' }))
+
+    expect(await screen.findByLabelText('商品名')).toBeInTheDocument()
+    expect(await screen.findByLabelText('商品単価')).toBeInTheDocument()
+    expect(await screen.findByLabelText('詳細')).toBeInTheDocument()
+    expect(await screen.findByLabelText('イメージURL')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('商品名'), {
+      target: { value: 'Product 3' },
+    })
+    fireEvent.change(screen.getByLabelText('商品単価'), {
+      target: { value: 3000 },
+    })
+    fireEvent.change(screen.getByLabelText('詳細'), {
+      target: { value: 'Description for product 3' },
+    })
+    fireEvent.change(screen.getByLabelText('イメージURL'), {
+      target: { value: 'https://example.com/product3.jpg' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '作成' }))
+
+    expect(await screen.findByText('Product 3')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
+  })
 })
