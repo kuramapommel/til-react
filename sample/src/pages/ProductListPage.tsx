@@ -39,17 +39,18 @@ type Product = {
   price: number
   description: string
 }
+const initialState = {
+  id: 0,
+  name: '',
+  image: '',
+  price: 0,
+  description: '',
+}
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [newProduct, setNewProduct] = useState<Product>({
-    id: 0,
-    name: '',
-    image: '',
-    price: 0,
-    description: '',
-  })
+  const [newProduct, setNewProduct] = useState<Product>(initialState)
 
   useEffect(() => {
     fetch('/api/products')
@@ -66,19 +67,22 @@ const ProductList: React.FC = () => {
     }))
   }
 
-  const handleAddProduct = () => {
-    setProducts((prevProducts) => [
-      ...prevProducts,
-      { ...newProduct, id: prevProducts.length + 1 },
-    ])
-    setIsModalOpen(false)
-    setNewProduct({
-      id: 0,
-      name: '',
-      image: '',
-      price: 0,
-      description: '',
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    fetch('/api/product', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newProduct),
     })
+      .then((response) => response.json())
+      .then((id) => {
+        setProducts((prevProducts) => [...prevProducts, { ...newProduct, id }])
+        setIsModalOpen(false)
+        setNewProduct(initialState)
+      })
+      .catch((error) => console.error('Error adding product:', error))
   }
 
   return (
@@ -91,48 +95,50 @@ const ProductList: React.FC = () => {
         <>
           <div css={styles.overlay} onClick={() => setIsModalOpen(false)} />
           <div css={styles.modal}>
-            <h2>新規作成モーダル</h2>
-            <label>
-              商品名:
-              <input
-                type="text"
-                name="name"
-                value={newProduct.name}
-                onChange={handleNewProductChange}
-                aria-label="商品名"
-              />
-            </label>
-            <label>
-              商品単価:
-              <input
-                type="number"
-                name="price"
-                value={newProduct.price}
-                onChange={handleNewProductChange}
-                aria-label="商品単価"
-              />
-            </label>
-            <label>
-              詳細:
-              <input
-                type="text"
-                name="description"
-                value={newProduct.description}
-                onChange={handleNewProductChange}
-                aria-label="詳細"
-              />
-            </label>
-            <label>
-              イメージURL:
-              <input
-                type="text"
-                name="image"
-                value={newProduct.image}
-                onChange={handleNewProductChange}
-                aria-label="イメージURL"
-              />
-            </label>
-            <button onClick={handleAddProduct}>作成</button>
+            <form onSubmit={handleSubmit}>
+              <h2>新規作成モーダル</h2>
+              <label>
+                商品名:
+                <input
+                  type="text"
+                  name="name"
+                  value={newProduct.name}
+                  onChange={handleNewProductChange}
+                  aria-label="商品名"
+                />
+              </label>
+              <label>
+                商品単価:
+                <input
+                  type="number"
+                  name="price"
+                  value={newProduct.price}
+                  onChange={handleNewProductChange}
+                  aria-label="商品単価"
+                />
+              </label>
+              <label>
+                詳細:
+                <input
+                  type="text"
+                  name="description"
+                  value={newProduct.description}
+                  onChange={handleNewProductChange}
+                  aria-label="詳細"
+                />
+              </label>
+              <label>
+                イメージURL:
+                <input
+                  type="text"
+                  name="image"
+                  value={newProduct.image}
+                  onChange={handleNewProductChange}
+                  aria-label="イメージURL"
+                />
+              </label>
+              <button onClick={handleSubmit}>作成</button>
+            </form>
           </div>
         </>
       )}

@@ -9,42 +9,17 @@ import {
   afterEach,
   afterAll,
 } from 'vitest'
-import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import Login from './LoginPage'
 import ProductList from './ProductListPage'
+import { handlers } from '../mocks/handlers'
 
 vi.mock('./api', () => ({
   login: vi.fn().mockResolvedValue({ success: true }),
 }))
 
 // モックサーバーを設定
-const server = setupServer(
-  http.get('/api/products', () => {
-    return HttpResponse.json(
-      [
-        {
-          id: 1,
-          name: 'Product 1',
-          image: 'https://example.com/product1.jpg',
-          price: 1000,
-          description: 'Description for product 1',
-        },
-        {
-          id: 2,
-          name: 'Product 2',
-          image: 'https://example.com/product2.jpg',
-          price: 2000,
-          description: 'Description for product 2',
-        },
-      ],
-      {
-        status: 202,
-        statusText: 'Mocked status',
-      },
-    )
-  }),
-)
+const server = setupServer(...handlers)
 
 // モックサーバーを起動および停止
 beforeAll(() => server.listen())
