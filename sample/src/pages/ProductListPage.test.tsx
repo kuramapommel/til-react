@@ -120,6 +120,16 @@ describe('LoginPage', () => {
     ).toBeInTheDocument()
   })
 
+  it('should not edit the product when clicking on "キャンセルボタン" in the edit modal', async () => {
+    render(<ProductList />)
+    const editButtons = await screen.findAllByText('編集')
+    fireEvent.click(editButtons[0])
+
+    fireEvent.click(screen.getByRole('button', { name: 'キャンセル' }))
+
+    expect(await screen.findByText('Product 1')).toBeInTheDocument()
+  })
+
   it('should open delete confirmation dialog when clicking on "削除ボタン" and delete the product', async () => {
     render(<ProductList />)
     const deleteButtons = await screen.findAllByText('削除')
