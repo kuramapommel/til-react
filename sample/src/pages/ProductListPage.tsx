@@ -81,10 +81,10 @@ const ProductList: React.FC = () => {
       .then((response) => response.json())
       .then((id) => {
         setProducts((prevProducts) => [...prevProducts, { ...newProduct, id }])
-        setIsModalOpen(false)
-        setNewProduct(initialState)
       })
       .catch((error) => console.error('Error adding product:', error))
+    setIsModalOpen(false)
+    setNewProduct(initialState)
   }
 
   const handleEditProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,16 +97,28 @@ const ProductList: React.FC = () => {
     }
   }
 
-  const handleSaveProduct = () => {
+  const handleSaveProduct = (e: React.FormEvent) => {
+    e.preventDefault()
     if (currentProduct) {
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product.id === currentProduct.id ? currentProduct : product,
-        ),
-      )
-      setIsEditModalOpen(false)
-      setCurrentProduct(null)
+      fetch(`/api/product/${currentProduct.id.toString()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct),
+      })
+        .then((response) => response.json())
+        .then((id) => {
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product.id === id ? currentProduct : product,
+            ),
+          )
+        })
+        .catch((error) => console.error('Error adding product:', error))
     }
+    setIsEditModalOpen(false)
+    setCurrentProduct(null)
   }
 
   return (
@@ -161,7 +173,7 @@ const ProductList: React.FC = () => {
                   aria-label="イメージURL"
                 />
               </label>
-              <button onClick={handleAddProduct}>作成</button>
+              <button type="submit">作成</button>
             </form>
           </div>
         </>
@@ -170,51 +182,53 @@ const ProductList: React.FC = () => {
         <>
           <div css={styles.overlay} onClick={() => setIsEditModalOpen(false)} />
           <div css={styles.modal}>
-            <h2>編集モーダル</h2>
-            <label>
-              商品名:
-              <input
-                type="text"
-                name="name"
-                value={currentProduct.name}
-                onChange={handleEditProductChange}
-                aria-label="商品名"
-              />
-            </label>
-            <label>
-              商品単価:
-              <input
-                type="number"
-                name="price"
-                value={currentProduct.price}
-                onChange={handleEditProductChange}
-                aria-label="商品単価"
-              />
-            </label>
-            <label>
-              詳細:
-              <input
-                type="text"
-                name="description"
-                value={currentProduct.description}
-                onChange={handleEditProductChange}
-                aria-label="詳細"
-              />
-            </label>
-            <label>
-              イメージURL:
-              <input
-                type="text"
-                name="image"
-                value={currentProduct.image}
-                onChange={handleEditProductChange}
-                aria-label="イメージURL"
-              />
-            </label>
-            <button onClick={handleSaveProduct}>保存</button>
-            <button onClick={() => setIsEditModalOpen(false)}>
-              キャンセル
-            </button>
+            <form onSubmit={handleSaveProduct}>
+              <h2>編集モーダル</h2>
+              <label>
+                商品名:
+                <input
+                  type="text"
+                  name="name"
+                  value={currentProduct.name}
+                  onChange={handleEditProductChange}
+                  aria-label="商品名"
+                />
+              </label>
+              <label>
+                商品単価:
+                <input
+                  type="number"
+                  name="price"
+                  value={currentProduct.price}
+                  onChange={handleEditProductChange}
+                  aria-label="商品単価"
+                />
+              </label>
+              <label>
+                詳細:
+                <input
+                  type="text"
+                  name="description"
+                  value={currentProduct.description}
+                  onChange={handleEditProductChange}
+                  aria-label="詳細"
+                />
+              </label>
+              <label>
+                イメージURL:
+                <input
+                  type="text"
+                  name="image"
+                  value={currentProduct.image}
+                  onChange={handleEditProductChange}
+                  aria-label="イメージURL"
+                />
+              </label>
+              <button type="submit">保存</button>
+              <button onClick={() => setIsEditModalOpen(false)}>
+                キャンセル
+              </button>
+            </form>
           </div>
         </>
       )}

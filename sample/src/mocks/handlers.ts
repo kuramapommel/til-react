@@ -8,7 +8,7 @@ type Product = {
   description: string
 }
 
-const products: Product[] = [
+let products: Product[] = [
   {
     id: 1,
     name: 'Product 1',
@@ -37,6 +37,23 @@ export const handlers = [
     async ({ request }) => {
       const newProduct: Product = await request.json()
       products.push(newProduct)
+
+      return HttpResponse.json(newProduct.id, {
+        status: 202,
+        statusText: 'Mocked status',
+      })
+    },
+  ),
+  http.post<{ id: string }, Product, number, '/api/product/:id'>(
+    '/api/product/:id',
+    async ({ params, request }) => {
+      const newProduct: Product = await request.json().then((data) => ({
+        ...data,
+        id: Number(params.id),
+      }))
+      products = products.map((product) =>
+        product.id === newProduct.id ? newProduct : product,
+      )
 
       return HttpResponse.json(newProduct.id, {
         status: 202,
