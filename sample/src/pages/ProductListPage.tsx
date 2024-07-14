@@ -30,6 +30,17 @@ const styles = {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
   `,
+  dialog: css`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  `,
 }
 
 type Product = {
@@ -51,8 +62,10 @@ const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
   const [newProduct, setNewProduct] = useState<Product>(initialState)
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null)
 
   useEffect(() => {
     fetch('/api/products')
@@ -127,6 +140,26 @@ const ProductList: React.FC = () => {
       <button css={styles.button} onClick={() => setIsModalOpen(true)}>
         新規作成
       </button>
+
+      {isDeleteDialogOpen && productToDelete && (
+        <div css={styles.overlay}>
+          <div css={styles.dialog}>
+            <p>{productToDelete.name}を本当に削除しますか？</p>
+            <button
+              onClick={() => {
+                setProducts(products.filter((p) => p.id !== productToDelete.id))
+                setIsDeleteDialogOpen(false)
+                setProductToDelete(null)
+              }}
+            >
+              削除する
+            </button>
+            <button onClick={() => setIsDeleteDialogOpen(false)}>
+              キャンセル
+            </button>
+          </div>
+        </div>
+      )}
       {isModalOpen && (
         <>
           <div css={styles.overlay} onClick={() => setIsModalOpen(false)} />
@@ -246,6 +279,14 @@ const ProductList: React.FC = () => {
               }}
             >
               編集
+            </button>
+            <button
+              onClick={() => {
+                setProductToDelete(product)
+                setIsDeleteDialogOpen(true)
+              }}
+            >
+              削除
             </button>
           </li>
         ))}

@@ -12,7 +12,7 @@ import {
 import { setupServer } from 'msw/node'
 import Login from './LoginPage'
 import ProductList from './ProductListPage'
-import { handlers } from '../mocks/handlers'
+import { handlers, resetProducts } from '../mocks/handlers'
 
 vi.mock('./api', () => ({
   login: vi.fn().mockResolvedValue({ success: true }),
@@ -23,7 +23,10 @@ const server = setupServer(...handlers)
 
 // モックサーバーを起動および停止
 beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
+afterEach(() => {
+  resetProducts()
+  server.resetHandlers()
+})
 afterAll(() => server.close())
 
 describe('LoginPage', () => {
@@ -115,5 +118,31 @@ describe('LoginPage', () => {
     expect(
       await screen.findByText('Updated Description for product 1'),
     ).toBeInTheDocument()
+  })
+
+  it('should open delete confirmation dialog when clicking on "削除ボタン" and delete the product', async () => {
+    render(<ProductList />)
+    const deleteButtons = await screen.findAllByText('削除')
+    fireEvent.click(deleteButtons[0])
+
+    expect(
+      await screen.findByText('Product 1を本当に削除しますか？'),
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '削除する' }))
+
+    expect(screen.queryByText('Product 1')).not.toBeInTheDocument()
+  })
+
+  it('should not delete the product when clicking on "キャンセルボタン" in the delete confirmation dialog', async () => {
+    render(<ProductList />)
+    const deleteButtons = await screen.findAllByText('削除')
+    fireEvent.click(deleteButtons[0])
+
+    expect(
+      await screen.findByText('Product 1を本当に削除しますか？'),
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'キャンセル' }))
+
+    expect(screen.queryByText('Product 1')).toBeInTheDocument()
   })
 })

@@ -8,7 +8,7 @@ type Product = {
   description: string
 }
 
-let products: Product[] = [
+const initialProducts: Product[] = [
   {
     id: 1,
     name: 'Product 1',
@@ -24,6 +24,11 @@ let products: Product[] = [
     description: 'Description for product 2',
   },
 ]
+
+let products: Product[] = initialProducts
+export function resetProducts() {
+  products = initialProducts
+}
 
 export const handlers = [
   http.get<{}, {}, Product[], '/api/products'>('/api/products', () => {
