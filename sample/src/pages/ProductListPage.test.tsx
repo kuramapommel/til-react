@@ -130,7 +130,7 @@ describe('LoginPage', () => {
     ).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '削除する' }))
 
-    expect(screen.queryByText('Product 1')).not.toBeInTheDocument()
+    expect(await screen.findByText('Product 1')).not.toBeInTheDocument()
   })
 
   it('should not delete the product when clicking on "キャンセルボタン" in the delete confirmation dialog', async () => {
@@ -143,6 +143,6 @@ describe('LoginPage', () => {
     ).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'キャンセル' }))
 
-    expect(screen.queryByText('Product 1')).toBeInTheDocument()
+    expect(await screen.findByText('Product 1')).toBeInTheDocument()
   })
 })

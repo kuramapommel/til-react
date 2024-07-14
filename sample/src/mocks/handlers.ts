@@ -66,4 +66,16 @@ export const handlers = [
       })
     },
   ),
+  http.delete<{ id: string }, {}, number, '/api/product/:id'>(
+    '/api/product/:id',
+    async ({ params }) => {
+      const id = Number(params.id)
+      products = products.filter((product) => product.id !== id)
+
+      return HttpResponse.json(id, {
+        status: 202,
+        statusText: 'Mocked status',
+      })
+    },
+  ),
 ]

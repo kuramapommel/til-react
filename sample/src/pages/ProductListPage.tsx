@@ -134,6 +134,24 @@ const ProductList: React.FC = () => {
     setCurrentProduct(null)
   }
 
+  const handleDeleteProduct = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (productToDelete) {
+      fetch(`/api/product/${productToDelete.id.toString()}`, {
+        method: 'DELETE',
+      })
+        .then((response) => response.json())
+        .then((id) => {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== id),
+          )
+        })
+        .catch((error) => console.error('Error deleting product:', error))
+    }
+    setIsDeleteDialogOpen(false)
+    setProductToDelete(null)
+  }
+
   return (
     <div css={styles.container}>
       <h2>Product List</h2>
@@ -144,19 +162,16 @@ const ProductList: React.FC = () => {
       {isDeleteDialogOpen && productToDelete && (
         <div css={styles.overlay}>
           <div css={styles.dialog}>
-            <p>{productToDelete.name}を本当に削除しますか？</p>
-            <button
-              onClick={() => {
-                setProducts(products.filter((p) => p.id !== productToDelete.id))
-                setIsDeleteDialogOpen(false)
-                setProductToDelete(null)
-              }}
-            >
-              削除する
-            </button>
-            <button onClick={() => setIsDeleteDialogOpen(false)}>
-              キャンセル
-            </button>
+            <form onSubmit={handleDeleteProduct}>
+              <p>{productToDelete.name}を本当に削除しますか？</p>
+              <button type="submit">削除する</button>
+              <button
+                type="button"
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                キャンセル
+              </button>
+            </form>
           </div>
         </div>
       )}
