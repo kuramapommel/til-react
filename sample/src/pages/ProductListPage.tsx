@@ -50,6 +50,8 @@ const initialState = {
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
   const [newProduct, setNewProduct] = useState<Product>(initialState)
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const ProductList: React.FC = () => {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault()
     fetch('/api/product', {
       method: 'POST',
@@ -85,6 +87,28 @@ const ProductList: React.FC = () => {
       .catch((error) => console.error('Error adding product:', error))
   }
 
+  const handleEditProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    if (currentProduct) {
+      setCurrentProduct({
+        ...currentProduct,
+        [name]: name === 'price' ? Number(value) : value,
+      })
+    }
+  }
+
+  const handleSaveProduct = () => {
+    if (currentProduct) {
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === currentProduct.id ? currentProduct : product,
+        ),
+      )
+      setIsEditModalOpen(false)
+      setCurrentProduct(null)
+    }
+  }
+
   return (
     <div css={styles.container}>
       <h2>Product List</h2>
@@ -95,7 +119,7 @@ const ProductList: React.FC = () => {
         <>
           <div css={styles.overlay} onClick={() => setIsModalOpen(false)} />
           <div css={styles.modal}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleAddProduct}>
               <h2>新規作成モーダル</h2>
               <label>
                 商品名:
@@ -137,8 +161,60 @@ const ProductList: React.FC = () => {
                   aria-label="イメージURL"
                 />
               </label>
-              <button onClick={handleSubmit}>作成</button>
+              <button onClick={handleAddProduct}>作成</button>
             </form>
+          </div>
+        </>
+      )}
+      {isEditModalOpen && currentProduct && (
+        <>
+          <div css={styles.overlay} onClick={() => setIsEditModalOpen(false)} />
+          <div css={styles.modal}>
+            <h2>編集モーダル</h2>
+            <label>
+              商品名:
+              <input
+                type="text"
+                name="name"
+                value={currentProduct.name}
+                onChange={handleEditProductChange}
+                aria-label="商品名"
+              />
+            </label>
+            <label>
+              商品単価:
+              <input
+                type="number"
+                name="price"
+                value={currentProduct.price}
+                onChange={handleEditProductChange}
+                aria-label="商品単価"
+              />
+            </label>
+            <label>
+              詳細:
+              <input
+                type="text"
+                name="description"
+                value={currentProduct.description}
+                onChange={handleEditProductChange}
+                aria-label="詳細"
+              />
+            </label>
+            <label>
+              イメージURL:
+              <input
+                type="text"
+                name="image"
+                value={currentProduct.image}
+                onChange={handleEditProductChange}
+                aria-label="イメージURL"
+              />
+            </label>
+            <button onClick={handleSaveProduct}>保存</button>
+            <button onClick={() => setIsEditModalOpen(false)}>
+              キャンセル
+            </button>
           </div>
         </>
       )}
@@ -149,6 +225,14 @@ const ProductList: React.FC = () => {
             <img src={product.image} alt={product.name} />
             <p>価格: {product.price.toLocaleString()}円</p>
             <p>{product.description}</p>
+            <button
+              onClick={() => {
+                setCurrentProduct(product)
+                setIsEditModalOpen(true)
+              }}
+            >
+              編集
+            </button>
           </li>
         ))}
       </ul>

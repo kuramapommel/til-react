@@ -85,4 +85,35 @@ describe('LoginPage', () => {
     expect(await screen.findByText('Product 3')).toBeInTheDocument()
     expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
   })
+
+  it('should open edit modal when clicking on "編集ボタン" and save changes', async () => {
+    render(<ProductList />)
+    const editButtons = await screen.findAllByText('編集')
+    fireEvent.click(editButtons[0])
+
+    expect(await screen.findByLabelText('商品名')).toBeInTheDocument()
+    expect(await screen.findByLabelText('商品単価')).toBeInTheDocument()
+    expect(await screen.findByLabelText('詳細')).toBeInTheDocument()
+    expect(await screen.findByLabelText('イメージURL')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('商品名'), {
+      target: { value: 'Updated Product 1' },
+    })
+    fireEvent.change(screen.getByLabelText('商品単価'), {
+      target: { value: 1500 },
+    })
+    fireEvent.change(screen.getByLabelText('詳細'), {
+      target: { value: 'Updated Description for product 1' },
+    })
+    fireEvent.change(screen.getByLabelText('イメージURL'), {
+      target: { value: 'https://placehold.jp/111111/777777/150x150.png' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '保存' }))
+
+    expect(await screen.findByText('Updated Product 1')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 1,500円')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Updated Description for product 1'),
+    ).toBeInTheDocument()
+  })
 })
