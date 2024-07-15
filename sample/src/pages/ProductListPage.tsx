@@ -3,6 +3,7 @@
 import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import ProductAdditionForm from '../components/molecules/forms/ProductAdditionForm'
+import ProductEditingForm from '../components/molecules/forms/ProductEditingForm'
 
 const styles = {
   container: css`
@@ -67,40 +68,6 @@ const ProductList: React.FC = () => {
       .catch((error) => console.error('Error fetching products:', error))
   }, [])
 
-  const handleEditProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    if (currentProduct) {
-      setCurrentProduct({
-        ...currentProduct,
-        [name]: name === 'price' ? Number(value) : value,
-      })
-    }
-  }
-
-  const handleSaveProduct = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (currentProduct) {
-      fetch(`/api/product/${currentProduct.id.toString()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(currentProduct),
-      })
-        .then((response) => response.json())
-        .then((id) => {
-          setProducts((prevProducts) =>
-            prevProducts.map((product) =>
-              product.id === id ? currentProduct : product,
-            ),
-          )
-        })
-        .catch((error) => console.error('Error adding product:', error))
-    }
-    setIsEditModalOpen(false)
-    setCurrentProduct(null)
-  }
-
   const handleDeleteProduct = (e: React.FormEvent) => {
     e.preventDefault()
     if (productToDelete) {
@@ -159,53 +126,24 @@ const ProductList: React.FC = () => {
         <>
           <div css={styles.overlay} onClick={() => setIsEditModalOpen(false)} />
           <div css={styles.modal}>
-            <form onSubmit={handleSaveProduct}>
-              <h2>編集モーダル</h2>
-              <label>
-                商品名:
-                <input
-                  type="text"
-                  name="name"
-                  value={currentProduct.name}
-                  onChange={handleEditProductChange}
-                  aria-label="商品名"
-                />
-              </label>
-              <label>
-                商品単価:
-                <input
-                  type="number"
-                  name="price"
-                  value={currentProduct.price}
-                  onChange={handleEditProductChange}
-                  aria-label="商品単価"
-                />
-              </label>
-              <label>
-                詳細:
-                <input
-                  type="text"
-                  name="description"
-                  value={currentProduct.description}
-                  onChange={handleEditProductChange}
-                  aria-label="詳細"
-                />
-              </label>
-              <label>
-                イメージURL:
-                <input
-                  type="text"
-                  name="image"
-                  value={currentProduct.image}
-                  onChange={handleEditProductChange}
-                  aria-label="イメージURL"
-                />
-              </label>
-              <button type="submit">保存</button>
-              <button onClick={() => setIsEditModalOpen(false)}>
-                キャンセル
-              </button>
-            </form>
+            <ProductEditingForm
+              initialCurrentProduct={currentProduct}
+              handleResponse={(newProduct) => {
+                setProducts((prevProducts) =>
+                  prevProducts.map((product) =>
+                    product.id === newProduct.id ? newProduct : product,
+                  ),
+                )
+              }}
+              handleCancel={() => {
+                setIsEditModalOpen(false)
+                setCurrentProduct(null)
+              }}
+              afterSubmit={() => {
+                setIsEditModalOpen(false)
+                setCurrentProduct(null)
+              }}
+            />
           </div>
         </>
       )}
