@@ -1,22 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import {
-  describe,
-  it,
-  vi,
-  expect,
-  beforeAll,
-  afterEach,
-  afterAll,
-} from 'vitest'
+import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import Login from './LoginPage'
 import ProductList from './ProductListPage'
 import { handlers, resetProducts } from '../mocks/handlers'
-
-vi.mock('./api', () => ({
-  login: vi.fn().mockResolvedValue({ success: true }),
-}))
 
 // モックサーバーを設定
 const server = setupServer(...handlers)
