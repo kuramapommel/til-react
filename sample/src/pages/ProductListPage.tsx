@@ -4,6 +4,7 @@ import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import ProductAdditionForm from '../components/molecules/forms/ProductAdditionForm'
 import ProductEditingForm from '../components/molecules/forms/ProductEditingForm'
+import FormModal from '../components/molecules/modal/FormModal'
 
 const styles = {
   container: css`
@@ -109,44 +110,48 @@ const ProductList: React.FC = () => {
           </div>
         </div>
       )}
-      {isModalOpen && (
-        <>
-          <div css={styles.overlay} onClick={() => setIsModalOpen(false)} />
-          <div css={styles.modal}>
-            <ProductAdditionForm
-              handleResponse={(product) => {
-                setProducts((prevProducts) => [...prevProducts, product])
-              }}
-              afterSubmit={() => setIsModalOpen(false)}
-            />
-          </div>
-        </>
-      )}
-      {isEditModalOpen && currentProduct && (
-        <>
-          <div css={styles.overlay} onClick={() => setIsEditModalOpen(false)} />
-          <div css={styles.modal}>
-            <ProductEditingForm
-              initialCurrentProduct={currentProduct}
-              handleResponse={(newProduct) => {
-                setProducts((prevProducts) =>
-                  prevProducts.map((product) =>
-                    product.id === newProduct.id ? newProduct : product,
-                  ),
-                )
-              }}
-              handleCancel={() => {
-                setIsEditModalOpen(false)
-                setCurrentProduct(null)
-              }}
-              afterSubmit={() => {
-                setIsEditModalOpen(false)
-                setCurrentProduct(null)
-              }}
-            />
-          </div>
-        </>
-      )}
+
+      <FormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ProductAdditionForm
+          handleResponse={(product) => {
+            setProducts((prevProducts) => [...prevProducts, product])
+          }}
+          afterSubmit={() => setIsModalOpen(false)}
+        />
+      </FormModal>
+
+      <FormModal
+        isOpen={isEditModalOpen && !!currentProduct}
+        onClose={() => setIsEditModalOpen(false)}
+      >
+        <ProductEditingForm
+          initialCurrentProduct={
+            // todo これはあまりにナンセンスなので、必ず修正する
+            currentProduct || {
+              id: 0,
+              name: '',
+              image: '',
+              price: 0,
+              description: '',
+            }
+          }
+          handleResponse={(newProduct) => {
+            setProducts((prevProducts) =>
+              prevProducts.map((product) =>
+                product.id === newProduct.id ? newProduct : product,
+              ),
+            )
+          }}
+          handleCancel={() => {
+            setIsEditModalOpen(false)
+            setCurrentProduct(null)
+          }}
+          afterSubmit={() => {
+            setIsEditModalOpen(false)
+            setCurrentProduct(null)
+          }}
+        />
+      </FormModal>
       <ul>
         {products.map((product) => (
           <li key={product.id}>
