@@ -2,6 +2,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
+import ProductAdditionForm from '../components/molecules/forms/ProductAdditionForm'
 
 const styles = {
   container: css`
@@ -50,13 +51,6 @@ type Product = {
   price: number
   description: string
 }
-const initialState = {
-  id: 0,
-  name: '',
-  image: '',
-  price: 0,
-  description: '',
-}
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
@@ -64,7 +58,6 @@ const ProductList: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
-  const [newProduct, setNewProduct] = useState<Product>(initialState)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
 
   useEffect(() => {
@@ -73,32 +66,6 @@ const ProductList: React.FC = () => {
       .then((data) => setProducts(data || []))
       .catch((error) => console.error('Error fetching products:', error))
   }, [])
-
-  const handleNewProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: name === 'price' ? Number(value) : value,
-    }))
-  }
-
-  const handleAddProduct = (e: React.FormEvent) => {
-    e.preventDefault()
-    fetch('/api/product', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .then((id) => {
-        setProducts((prevProducts) => [...prevProducts, { ...newProduct, id }])
-      })
-      .catch((error) => console.error('Error adding product:', error))
-    setIsModalOpen(false)
-    setNewProduct(initialState)
-  }
 
   const handleEditProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -118,7 +85,7 @@ const ProductList: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newProduct),
+        body: JSON.stringify(currentProduct),
       })
         .then((response) => response.json())
         .then((id) => {
@@ -179,50 +146,12 @@ const ProductList: React.FC = () => {
         <>
           <div css={styles.overlay} onClick={() => setIsModalOpen(false)} />
           <div css={styles.modal}>
-            <form onSubmit={handleAddProduct}>
-              <h2>新規作成モーダル</h2>
-              <label>
-                商品名:
-                <input
-                  type="text"
-                  name="name"
-                  value={newProduct.name}
-                  onChange={handleNewProductChange}
-                  aria-label="商品名"
-                />
-              </label>
-              <label>
-                商品単価:
-                <input
-                  type="number"
-                  name="price"
-                  value={newProduct.price}
-                  onChange={handleNewProductChange}
-                  aria-label="商品単価"
-                />
-              </label>
-              <label>
-                詳細:
-                <input
-                  type="text"
-                  name="description"
-                  value={newProduct.description}
-                  onChange={handleNewProductChange}
-                  aria-label="詳細"
-                />
-              </label>
-              <label>
-                イメージURL:
-                <input
-                  type="text"
-                  name="image"
-                  value={newProduct.image}
-                  onChange={handleNewProductChange}
-                  aria-label="イメージURL"
-                />
-              </label>
-              <button type="submit">作成</button>
-            </form>
+            <ProductAdditionForm
+              handleResponse={(product) => {
+                setProducts((prevProducts) => [...prevProducts, product])
+              }}
+              afterSubmit={() => setIsModalOpen(false)}
+            />
           </div>
         </>
       )}

@@ -41,7 +41,7 @@ export const handlers = [
     '/api/product',
     async ({ request }) => {
       const newProduct: Product = await request.json()
-      products.push(newProduct)
+      products.push({ ...newProduct, id: products.length + 1 })
 
       return HttpResponse.json(newProduct.id, {
         status: 202,
