@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import ProductAdditionForm from '../components/molecules/forms/ProductAdditionForm'
 import ProductEditingForm from '../components/molecules/forms/ProductEditingForm'
 import FormModal from '../components/molecules/modal/FormModal'
+import ProductDeletionForm from '../components/molecules/forms/ProductDeletionForm'
 
 const styles = {
   container: css`
@@ -69,24 +70,6 @@ const ProductList: React.FC = () => {
       .catch((error) => console.error('Error fetching products:', error))
   }, [])
 
-  const handleDeleteProduct = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (productToDelete) {
-      fetch(`/api/product/${productToDelete.id.toString()}`, {
-        method: 'DELETE',
-      })
-        .then((response) => response.json())
-        .then((id) => {
-          setProducts((prevProducts) =>
-            prevProducts.filter((product) => product.id !== id),
-          )
-        })
-        .catch((error) => console.error('Error deleting product:', error))
-    }
-    setIsDeleteDialogOpen(false)
-    setProductToDelete(null)
-  }
-
   return (
     <div css={styles.container}>
       <h2>Product List</h2>
@@ -97,16 +80,16 @@ const ProductList: React.FC = () => {
       {isDeleteDialogOpen && productToDelete && (
         <div css={styles.overlay}>
           <div css={styles.dialog}>
-            <form onSubmit={handleDeleteProduct}>
-              <p>{productToDelete.name}を本当に削除しますか？</p>
-              <button type="submit">削除する</button>
-              <button
-                type="button"
-                onClick={() => setIsDeleteDialogOpen(false)}
-              >
-                キャンセル
-              </button>
-            </form>
+            <ProductDeletionForm
+              selectedProduct={productToDelete}
+              handleResponse={(id) => {
+                setProducts((prevProducts) =>
+                  prevProducts.filter((product) => product.id !== id),
+                )
+              }}
+              handleCancel={() => setIsDeleteDialogOpen(false)}
+              afterSubmit={() => setIsDeleteDialogOpen(false)}
+            ></ProductDeletionForm>
           </div>
         </div>
       )}
