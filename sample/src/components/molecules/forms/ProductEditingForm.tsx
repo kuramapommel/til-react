@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 
 type Product = {
@@ -22,28 +23,24 @@ const ProductEditingForm: React.FC<ProductEditingFormProps> = (
   )
   const handleEditProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (currentProduct) {
-      setCurrentProduct({
-        ...currentProduct,
-        [name]: name === 'price' ? Number(value) : value,
-      })
-    }
+    setCurrentProduct({
+      ...currentProduct,
+      [name]: name === 'price' ? Number(value) : value,
+    })
   }
 
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault()
-    if (currentProduct) {
-      fetch(`/api/product/${currentProduct.id.toString()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(currentProduct),
-      })
-        .then((response) => response.json())
-        .then((id) => props.handleResponse({ ...currentProduct, id }))
-        .catch((error) => console.error('Error adding product:', error))
-    }
+    fetch(`/api/product/${currentProduct.id.toString()}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(currentProduct),
+    })
+      .then((response) => response.json())
+      .then((id) => props.handleResponse({ ...currentProduct, id }))
+      .catch((error) => console.error('Error adding product:', error))
     props.afterSubmit()
     setCurrentProduct(currentProduct)
   }
@@ -99,4 +96,4 @@ const ProductEditingForm: React.FC<ProductEditingFormProps> = (
   )
 }
 
-export default ProductEditingForm
+export default React.memo(ProductEditingForm)

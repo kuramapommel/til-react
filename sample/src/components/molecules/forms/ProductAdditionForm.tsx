@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 
 type Product = {
@@ -100,4 +101,4 @@ const ProductAdditionForm: React.FC<ProductAdditionFormProps> = (
   )
 }
 
-export default ProductAdditionForm
+export default React.memo(ProductAdditionForm)
