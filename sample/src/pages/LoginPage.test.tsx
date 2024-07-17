@@ -22,6 +22,7 @@ describe('Login Component', () => {
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/products" element={<div />} />
         </Routes>
       </MemoryRouter>,
     )
