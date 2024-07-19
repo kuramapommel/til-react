@@ -2,10 +2,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
-import ProductAdditionForm from '../components/molecules/forms/ProductAdditionForm'
-import ProductEditingForm from '../components/molecules/forms/ProductEditingForm'
-import FormModal from '../components/molecules/modal/FormModal'
-import ProductDeletionForm from '../components/molecules/forms/ProductDeletionForm'
+import ProductAdditionForm from '../components/molecules/forms/product-addition-form'
+import ProductEditingForm from '../components/molecules/forms/product-editing-form'
+import FormModal from '../components/molecules/modal/form-modal'
+import ProductDeletionForm from '../components/molecules/forms/product-deletion-form'
 
 const styles = {
   container: css`
