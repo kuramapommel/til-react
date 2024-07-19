@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './index.css'
-import Login from './pages/LoginPage'
-import ProductList from './pages/ProductListPage'
+import Login from './pages/login'
+import ProductList from './pages/product-list'
 import App from './App'
 
 if (process.env.NODE_ENV === 'development') {

@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { setupServer } from 'msw/node'
-import Login from './LoginPage'
-import ProductList from './ProductListPage'
+import Login from './login'
+import ProductList from './product-list'
 import { handlers, resetProducts } from '../mocks/handlers'
 
 // モックサーバーを設定
