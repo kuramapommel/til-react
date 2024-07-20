@@ -25,9 +25,9 @@ const initialProducts: Product[] = [
   },
 ]
 
-let products: Product[] = initialProducts
+let products: Product[] = [...initialProducts]
 export function resetProducts() {
-  products = initialProducts
+  products = [...initialProducts]
 }
 
 export const handlers = [
@@ -41,7 +41,7 @@ export const handlers = [
     '/api/product',
     async ({ request }) => {
       const newProduct: Product = await request.json()
-      products.push({ ...newProduct, id: products.length + 1 })
+      products = [...products, { ...newProduct, id: products.length + 1 }]
 
       return HttpResponse.json(newProduct.id, {
         status: 202,
