@@ -10,11 +10,31 @@ export type Product = {
 
 type ProductStore = {
   products: Product[]
+  remove: (id: number) => void
+  pop: (product: Product) => void
+  put: (newProduct: Product) => void
   refresh: () => Promise<void>
 }
 
 export const useProducts = create<ProductStore>()((set) => ({
   products: [],
+  remove: (id: number) => {
+    set((state) => ({
+      products: state.products.filter((product) => product.id !== id),
+    }))
+  },
+  pop: (product: Product) => {
+    set((state) => ({
+      products: [...state.products, product],
+    }))
+  },
+  put: (newProduct: Product) => {
+    set((state) => ({
+      products: state.products.map((prevProduct) =>
+        prevProduct.id === newProduct.id ? newProduct : prevProduct,
+      ),
+    }))
+  },
   refresh: async () => {
     const res = await fetch('/api/products')
       .then((response) => response.json())
@@ -25,7 +45,7 @@ export const useProducts = create<ProductStore>()((set) => ({
       })
 
     set(() => ({
-      products: res,
+      products: [...res],
     }))
   },
 }))

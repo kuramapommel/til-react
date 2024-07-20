@@ -6,6 +6,7 @@ import ProductAdditionForm from '../components/molecules/forms/product-addition-
 import ProductEditingForm from '../components/molecules/forms/product-editing-form'
 import FormModal from '../components/molecules/modal/form-modal'
 import ProductDeletionForm from '../components/molecules/forms/product-deletion-form'
+import { useProducts } from '../hooks/use-products'
 
 const styles = {
   container: css`
@@ -56,7 +57,7 @@ type Product = {
 }
 
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([])
+  const { products, pop, remove, put, refresh } = useProducts()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -64,10 +65,7 @@ const ProductList: React.FC = () => {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
 
   useEffect(() => {
-    fetch('/api/products')
-      .then((response) => response.json())
-      .then((data) => setProducts(data || []))
-      .catch((error) => console.error('Error fetching products:', error))
+    refresh()
   }, [])
 
   return (
@@ -82,11 +80,7 @@ const ProductList: React.FC = () => {
           <div css={styles.dialog}>
             <ProductDeletionForm
               selectedProduct={productToDelete}
-              handleResponse={(id) => {
-                setProducts((prevProducts) =>
-                  prevProducts.filter((product) => product.id !== id),
-                )
-              }}
+              handleResponse={remove}
               handleCancel={() => setIsDeleteDialogOpen(false)}
               afterSubmit={() => setIsDeleteDialogOpen(false)}
             ></ProductDeletionForm>
@@ -96,9 +90,7 @@ const ProductList: React.FC = () => {
 
       <FormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ProductAdditionForm
-          handleResponse={(product) => {
-            setProducts((prevProducts) => [...prevProducts, product])
-          }}
+          handleResponse={pop}
           afterSubmit={() => setIsModalOpen(false)}
         />
       </FormModal>
@@ -118,13 +110,7 @@ const ProductList: React.FC = () => {
               description: '',
             }
           }
-          handleResponse={(newProduct) => {
-            setProducts((prevProducts) =>
-              prevProducts.map((product) =>
-                product.id === newProduct.id ? newProduct : product,
-              ),
-            )
-          }}
+          handleResponse={put}
           handleCancel={() => {
             setIsEditModalOpen(false)
             setCurrentProduct(null)

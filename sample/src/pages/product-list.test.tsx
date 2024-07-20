@@ -39,7 +39,9 @@ describe('LoginPage', () => {
     // Wait for navigation
     expect(await screen.findByText(/product list/i)).toBeInTheDocument()
   })
+})
 
+describe('ProductList', () => {
   it('should display a list of products with their properties', async () => {
     render(<ProductList />)
 
