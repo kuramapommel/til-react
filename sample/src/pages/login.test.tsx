@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import Login from './login'
 import { describe, it, expect, vi } from 'vitest'
 
-describe('Login Component', () => {
+describe('Login', () => {
   it('renders login form', () => {
     render(
       <MemoryRouter initialEntries={['/login']}>

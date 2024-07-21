@@ -7,7 +7,7 @@ import ProductList from './pages/product-list'
 import App from './App'
 
 if (process.env.NODE_ENV === 'development') {
-  const { worker } = await import('./mocks/browser')
+  const { worker } = await import('./testing/mocks/browser')
   worker.start()
 }
 

@@ -4,7 +4,7 @@ import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import Login from './login'
 import ProductList from './product-list'
-import { handlers, resetProducts } from '../mocks/handlers'
+import { handlers, resetProducts } from '../testing/mocks/handlers'
 
 // モックサーバーを設定
 const server = setupServer(...handlers)
@@ -17,7 +17,7 @@ afterEach(() => {
 })
 afterAll(() => server.close())
 
-describe('LoginPage', () => {
+describe('Login', () => {
   it('should navigate to product list after login', async () => {
     render(
       <MemoryRouter initialEntries={['/login']}>

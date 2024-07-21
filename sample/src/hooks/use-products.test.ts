@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, expect, test, vi } from 'vitest'
 import { useProducts } from './use-products'
 import { renderHook, waitFor } from '@testing-library/react'
 import { setupServer } from 'msw/node'
-import { handlers, resetProducts } from '../mocks/handlers'
+import { handlers, resetProducts } from '../testing/mocks/handlers'
 import { HttpResponse, http } from 'msw'
 
 const server = setupServer(...handlers)
