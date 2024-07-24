@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from '@testing-library/react'
+import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import Login from './login'
 import { describe, it, expect, vi } from 'vitest'
@@ -17,7 +17,7 @@ describe('Login', () => {
     expect(screen.getByRole('button', { name: 'ログイン' })).toBeInTheDocument()
   })
 
-  it('submits the form with valid data', () => {
+  it('submits the form with valid data', async () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
@@ -26,20 +26,25 @@ describe('Login', () => {
         </Routes>
       </MemoryRouter>,
     )
-    fireEvent.change(screen.getByPlaceholderText('ユーザー名'), {
+
+    fireEvent.input(screen.getByPlaceholderText('ユーザー名'), {
       target: { value: 'testuser' },
     })
-    fireEvent.change(screen.getByPlaceholderText('パスワード'), {
+    fireEvent.input(screen.getByPlaceholderText('パスワード'), {
       target: { value: 'password' },
     })
     console.log = vi.fn()
-    fireEvent.click(screen.getByRole('button', { name: 'ログイン' }))
+    const loginButton = await screen.findByRole('button', { name: 'ログイン' })
+    expect(loginButton).toBeEnabled()
+    fireEvent.submit(loginButton)
 
-    expect(console.log).toHaveBeenCalledWith('Username:', 'testuser')
-    expect(console.log).toHaveBeenCalledWith('Password:', 'password')
+    await waitFor(() => {
+      expect(console.log).toHaveBeenCalledWith('Username:', 'testuser')
+      expect(console.log).toHaveBeenCalledWith('Password:', 'password')
+    })
   })
 
-  it('shows validation error with empty fields', () => {
+  it('shows validation error with empty fields', async () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
@@ -47,8 +52,7 @@ describe('Login', () => {
         </Routes>
       </MemoryRouter>,
     )
-    fireEvent.click(screen.getByRole('button', { name: 'ログイン' }))
-    expect(screen.getByPlaceholderText('ユーザー名')).toBeInvalid()
-    expect(screen.getByPlaceholderText('パスワード')).toBeInvalid()
+    const loginButton = await screen.findByRole('button', { name: 'ログイン' })
+    expect(loginButton).toBeDisabled()
   })
 })

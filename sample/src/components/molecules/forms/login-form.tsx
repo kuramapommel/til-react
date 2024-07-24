@@ -1,14 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const formStyle = css`
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  background: white;
+  background: gray;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `
@@ -38,28 +40,31 @@ const buttonStyle = css`
   }
 `
 
+const validationSchema = z.object({
+  username: z
+    .string()
+    .min(1, 'ユーザー名は必須です')
+    .min(4, 'ユーザー名は4文字以上で入力してください'),
+  password: z
+    .string()
+    .min(1, 'パスワードは必須です')
+    .min(8, 'ユーザー名は8文字以上で入力してください'),
+})
+
+type LoginFormInputs = z.infer<typeof validationSchema>
+
 const LoginForm: React.FC = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginFormInputs>({
+    mode: 'onBlur',
+    resolver: zodResolver(validationSchema),
+  })
   const navigate = useNavigate()
 
-  const schema = z.object({
-    username: z.string().min(1, 'ユーザー名は必須です'),
-    password: z.string().min(1, 'パスワードは必須です'),
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
-    const result = schema.safeParse({ username, password })
-
-    if (!result.success) {
-      setError(result.error.errors.map((err) => err.message).join(', '))
-      return
-    }
-
+  const onSubmit = ({ username, password }: LoginFormInputs) => {
     // ログイン処理
     console.log('Username:', username)
     console.log('Password:', password)
@@ -67,26 +72,26 @@ const LoginForm: React.FC = () => {
     navigate('/products')
   }
   return (
-    <form onSubmit={handleSubmit} css={formStyle}>
+    <form onSubmit={handleSubmit(onSubmit)} css={formStyle}>
       <h2>ログイン</h2>
-      {error && <p css={{ color: 'red' }}>{error}</p>}
+      <label htmlFor="username">名前</label>
       <input
         type="text"
         placeholder="ユーザー名"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        id="username"
+        {...register('username')}
         css={inputStyle}
-        required
       />
+      {errors.username && <p>{errors.username.message}</p>}
+      <label htmlFor="password">パスワード</label>
       <input
         type="password"
         placeholder="パスワード"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        {...register('password')}
         css={inputStyle}
-        required
       />
-      <button type="submit" css={buttonStyle}>
+      {errors.password && <p>{errors.password.message}</p>}
+      <button type="submit" disabled={!isValid} css={buttonStyle}>
         ログイン
       </button>
     </form>

@@ -28,13 +28,15 @@ describe('Login', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.change(screen.getByPlaceholderText('ユーザー名'), {
+    fireEvent.input(screen.getByPlaceholderText('ユーザー名'), {
       target: { value: 'testuser' },
     })
-    fireEvent.change(screen.getByPlaceholderText('パスワード'), {
+    fireEvent.input(screen.getByPlaceholderText('パスワード'), {
       target: { value: 'password' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'ログイン' }))
+    const loginButton = await screen.findByRole('button', { name: 'ログイン' })
+    expect(loginButton).toBeEnabled()
+    fireEvent.submit(loginButton)
 
     // Wait for navigation
     expect(await screen.findByText(/product list/i)).toBeInTheDocument()
