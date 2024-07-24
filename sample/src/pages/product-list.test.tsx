@@ -91,19 +91,21 @@ describe('ProductList', () => {
     expect(await screen.findByLabelText('詳細')).toBeInTheDocument()
     expect(await screen.findByLabelText('イメージURL')).toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText('商品名'), {
+    fireEvent.input(screen.getByLabelText('商品名'), {
       target: { value: 'Updated Product 1' },
     })
-    fireEvent.change(screen.getByLabelText('商品単価'), {
+    fireEvent.input(screen.getByLabelText('商品単価'), {
       target: { value: 1500 },
     })
-    fireEvent.change(screen.getByLabelText('詳細'), {
+    fireEvent.input(screen.getByLabelText('詳細'), {
       target: { value: 'Updated Description for product 1' },
     })
-    fireEvent.change(screen.getByLabelText('イメージURL'), {
+    fireEvent.input(screen.getByLabelText('イメージURL'), {
       target: { value: 'https://placehold.jp/111111/777777/150x150.png' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '保存' }))
+    const submitButton = await screen.findByRole('button', { name: '保存' })
+    expect(submitButton).toBeEnabled()
+    fireEvent.submit(submitButton)
 
     expect(await screen.findByText('Updated Product 1')).toBeInTheDocument()
     expect(await screen.findByText('価格: 1,500円')).toBeInTheDocument()

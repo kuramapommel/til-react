@@ -8,9 +8,9 @@ const styles = {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: gray;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid gray;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
   `,
