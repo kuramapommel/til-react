@@ -15,17 +15,6 @@ const styles = {
   button: css`
     margin-bottom: 20px;
   `,
-  modal: css`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-  `,
   overlay: css`
     position: fixed;
     top: 0;
