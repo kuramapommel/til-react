@@ -1,20 +1,20 @@
 import React from 'react'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-type Product = {
-  id: number
-  name: string
-  image: string
-  price: number
-  description: string
-}
-const initialState = {
-  id: 0,
-  name: '',
-  image: '',
-  price: 0,
-  description: '',
-}
+// todo product type は type.ts に切り出して良い
+const validationSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, '商品名は必須です'),
+  image: z.string().min(1, '商品画像は必須です'),
+  price: z
+    .number()
+    .min(1, '価格は必須です')
+    .positive('価格は正の値で入力してください'),
+  description: z.string(),
+})
+type Product = z.infer<typeof validationSchema>
 
 type ProductAdditionFormProps = {
   handleResponse: (newProduct: Product) => void
@@ -24,79 +24,79 @@ type ProductAdditionFormProps = {
 const ProductAdditionForm: React.FC<ProductAdditionFormProps> = (
   props: ProductAdditionFormProps,
 ) => {
-  const [newProduct, setNewProduct] = useState<Product>(initialState)
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: name === 'price' ? Number(value) : value,
-    }))
-  }
-
-  const handleAddProduct = (e: React.FormEvent) => {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<Product>({
+    mode: 'onBlur',
+    resolver: zodResolver(validationSchema),
+    defaultValues: { id: 0 },
+  })
+  const handleAddProduct = (product: Product) => {
     fetch('/api/product', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newProduct),
+      body: JSON.stringify(product),
     })
       .then((response) => response.json())
       .then((id) => {
         console.log('response:', id)
-        props.handleResponse({ ...newProduct, id })
+        props.handleResponse({ ...product, id })
       })
       .catch((error) => console.error('Error adding product:', error))
 
     props.afterSubmit()
-    setNewProduct(initialState)
   }
 
   return (
-    <form onSubmit={handleAddProduct}>
+    <form onSubmit={handleSubmit(handleAddProduct)}>
       <h2>新規作成モーダル</h2>
       <label>
         商品名:
         <input
           type="text"
-          name="name"
-          value={newProduct.name}
-          onChange={handleInputChange}
+          id="name"
+          {...register('name')}
           aria-label="商品名"
         />
       </label>
+      {errors.name && <p>{errors.name.message}</p>}
       <label>
         商品単価:
         <input
           type="number"
-          name="price"
-          value={newProduct.price}
-          onChange={handleInputChange}
+          id="price"
+          {...register('price', { valueAsNumber: true })}
           aria-label="商品単価"
         />
       </label>
+      {errors.price && <p>{errors.price.message}</p>}
       <label>
         詳細:
         <input
           type="text"
-          name="description"
-          value={newProduct.description}
-          onChange={handleInputChange}
+          id="description"
+          {...register('description')}
           aria-label="詳細"
         />
       </label>
+      {errors.description && <p>{errors.description.message}</p>}
       <label>
         イメージURL:
         <input
           type="text"
-          name="image"
-          value={newProduct.image}
-          onChange={handleInputChange}
+          id="image"
+          {...register('image')}
           aria-label="イメージURL"
         />
       </label>
-      <button type="submit">作成</button>
+      {errors.image && <p>{errors.image.message}</p>}
+      <button type="submit" disabled={!isValid}>
+        作成
+      </button>
     </form>
   )
 }

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { setupServer } from 'msw/node'
@@ -62,20 +62,25 @@ describe('ProductList', () => {
     expect(await screen.findByLabelText('商品単価')).toBeInTheDocument()
     expect(await screen.findByLabelText('詳細')).toBeInTheDocument()
     expect(await screen.findByLabelText('イメージURL')).toBeInTheDocument()
+    const submitButton = await screen.findByRole('button', { name: '作成' })
+    expect(submitButton).toBeDisabled()
 
-    fireEvent.change(screen.getByLabelText('商品名'), {
-      target: { value: 'Product 3' },
+    await waitFor(() => {
+      fireEvent.input(screen.getByLabelText('商品名'), {
+        target: { value: 'Product 3' },
+      })
+      fireEvent.input(screen.getByLabelText('商品単価'), {
+        target: { value: 3000 },
+      })
+      fireEvent.input(screen.getByLabelText('詳細'), {
+        target: { value: 'Description for product 3' },
+      })
+      fireEvent.input(screen.getByLabelText('イメージURL'), {
+        target: { value: 'https://example.com/product3.jpg' },
+      })
     })
-    fireEvent.change(screen.getByLabelText('商品単価'), {
-      target: { value: 3000 },
-    })
-    fireEvent.change(screen.getByLabelText('詳細'), {
-      target: { value: 'Description for product 3' },
-    })
-    fireEvent.change(screen.getByLabelText('イメージURL'), {
-      target: { value: 'https://example.com/product3.jpg' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: '作成' }))
+    expect(submitButton).toBeEnabled()
+    fireEvent.submit(submitButton)
 
     expect(await screen.findByText('Product 3')).toBeInTheDocument()
     expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
