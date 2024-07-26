@@ -6,11 +6,13 @@ import Login from './pages/login'
 import ProductList from './pages/product-list'
 import App from './App'
 import { enableMocking } from './testing/mocks'
+import GlobalStyles from './styles/global-styles'
 
 await enableMocking()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <GlobalStyles />
     <Router>
       <Routes>
         <Route path="/" element={<App />} />

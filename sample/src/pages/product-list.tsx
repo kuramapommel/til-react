@@ -1,6 +1,4 @@
-// ProductList.tsx
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+import { css } from 'twin.macro'
 import { useEffect, useState } from 'react'
 import ProductAdditionForm from '../components/molecules/forms/product-addition-form'
 import ProductEditingForm from '../components/molecules/forms/product-editing-form'

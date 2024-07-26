@@ -1,0 +1,28 @@
+// {
+//   "plugins": [
+//     [
+//       "@babel/plugin-transform-react-jsx",
+//       {
+//         "runtime": "automatic"
+//       }
+//     ],
+//     "@emotion"
+//   ]
+// }
+{
+  "presets": [
+    [
+      "@babel/preset-react",
+      { "runtime": "automatic", "importSource": "@emotion/react" }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-react-jsx",
+      {
+        "runtime": "automatic"
+      }
+    ],
+    "@emotion"
+  ]
+}

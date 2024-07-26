@@ -1,5 +1,4 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+import { css } from 'twin.macro'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -80,7 +79,7 @@ const LoginForm: React.FC = () => {
         placeholder="ユーザー名"
         id="username"
         {...register('username')}
-        css={inputStyle}
+        css={[inputStyle]}
       />
       {errors.username && <p>{errors.username.message}</p>}
       <label htmlFor="password">パスワード</label>

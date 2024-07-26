@@ -1,5 +1,4 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+import { css } from 'twin.macro'
 import LoginForm from '../components/molecules/forms/login-form'
 
 const containerStyle = css`

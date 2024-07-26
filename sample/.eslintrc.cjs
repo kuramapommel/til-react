@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { 
+  env: {
     browser: true,
     es2021: true,
     jest: true,
@@ -9,7 +9,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:react/recommended',
     'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
