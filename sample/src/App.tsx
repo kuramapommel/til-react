@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useProducts } from './hooks/use-products'
+import { Link } from 'react-router-dom'
 
 function App() {
   const { products, refresh } = useProducts()
@@ -12,16 +13,16 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <header className="text-gray-900 border-b border-gray-200">
         <div className="container flex mx-auto p-5 flex-col md:flex-row items-center">
-          <a href="/" className="font-medium mb-4 md:mb-0">
+          <Link to="/" className="font-medium mb-4 md:mb-0">
             <span className="text-xl ml-3">ぽめモール</span>
-          </a>
+          </Link>
           <nav className="md:ml-auto text-base">
-            <a href="/login" className="hover:text-green-600 duration-300 mr-5">
+            <Link to="/" className="hover:text-green-600 duration-300 mr-5">
               ログイン
-            </a>
-            <a href="" className="hover:text-green-600 duration-300">
+            </Link>
+            <Link to="/login" className="hover:text-green-600 duration-300">
               事業者の方はこちら
-            </a>
+            </Link>
           </nav>
         </div>
       </header>
@@ -53,7 +54,7 @@ function App() {
       </main>
 
       <footer className="min-h-12">
-        <div className="container">
+        <div className="container mx-auto">
           <p className="text-base text-center my-3">©2022-2024 kuramapommel</p>
         </div>
       </footer>
