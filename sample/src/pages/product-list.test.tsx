@@ -1,6 +1,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterEach,
+  afterAll,
+  beforeEach,
+} from 'vitest'
 import { setupServer } from 'msw/node'
 import Login from './login'
 import ProductList from './product-list'
@@ -44,9 +52,17 @@ describe('Login', () => {
 })
 
 describe('ProductList', () => {
-  it('should display a list of products with their properties', async () => {
-    render(<ProductList />)
+  beforeEach(() => {
+    render(
+      <MemoryRouter initialEntries={['/products']}>
+        <Routes>
+          <Route path="/products" element={<ProductList />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+  })
 
+  it('should display a list of products with their properties', async () => {
     expect(await screen.findByText('Product 1')).toBeInTheDocument()
     expect(await screen.findByText('Product 2')).toBeInTheDocument()
     expect(await screen.findByText('価格: 1,000円')).toBeInTheDocument()
@@ -54,8 +70,6 @@ describe('ProductList', () => {
   })
 
   it('should open modal when clicking on "新規作成ボタン" and add a new product', async () => {
-    render(<ProductList />)
-
     fireEvent.click(screen.getByRole('button', { name: '新規作成' }))
 
     expect(await screen.findByLabelText('商品名')).toBeInTheDocument()
@@ -87,7 +101,6 @@ describe('ProductList', () => {
   })
 
   it('should open edit modal when clicking on "編集ボタン" and save changes', async () => {
-    render(<ProductList />)
     const editButtons = await screen.findAllByText('編集')
     fireEvent.click(editButtons[0])
 
@@ -120,7 +133,6 @@ describe('ProductList', () => {
   })
 
   it('should not edit the product when clicking on "キャンセルボタン" in the edit modal', async () => {
-    render(<ProductList />)
     const editButtons = await screen.findAllByText('編集')
     fireEvent.click(editButtons[0])
 
@@ -130,7 +142,6 @@ describe('ProductList', () => {
   })
 
   it('should open delete confirmation dialog when clicking on "削除ボタン" and delete the product', async () => {
-    render(<ProductList />)
     const deleteButtons = await screen.findAllByText('削除')
     fireEvent.click(deleteButtons[0])
 
@@ -143,7 +154,6 @@ describe('ProductList', () => {
   })
 
   it('should not delete the product when clicking on "キャンセルボタン" in the delete confirmation dialog', async () => {
-    render(<ProductList />)
     const deleteButtons = await screen.findAllByText('削除')
     fireEvent.click(deleteButtons[0])
 
