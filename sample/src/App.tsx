@@ -1,34 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react'
+import { useProducts } from './hooks/use-products'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { products, refresh } = useProducts()
+
+  useEffect(() => {
+    refresh()
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-3xl font-bold underline">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="flex flex-col min-h-screen">
+      <header className="text-gray-900 border-b border-gray-200">
+        <div className="container flex mx-auto p-5 flex-col md:flex-row items-center">
+          <a href="/" className="font-medium mb-4 md:mb-0">
+            <span className="text-xl ml-3">ぽめモール</span>
+          </a>
+          <nav className="md:ml-auto text-base">
+            <a href="/login" className="hover:text-green-600 duration-300 mr-5">
+              ログイン
+            </a>
+            <a href="" className="hover:text-green-600 duration-300">
+              事業者の方はこちら
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main className="text-gray-900 border-b border-gray-200 flex-grow">
+        <div className="container flex mx-auto p-5 flex-col items-center">
+          <h1 className="text-3xl md:text-5xl">商品一覧</h1>
+          <div>
+            <ul className="flex flex-col md:flex-row">
+              {products.map((product) => (
+                <li key={product.id} className="mx-5 mt-5 w-[200px]">
+                  <h2 className="text-center text-lg md:text-xl">
+                    {product.name}
+                  </h2>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="mx-auto mt-2"
+                  />
+                  <p className="text-center text-base mt-2">
+                    価格: {product.price.toLocaleString()}円
+                  </p>
+                  <p className="text-base mt-1">{product.description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </main>
+
+      <footer className="min-h-12">
+        <div className="container">
+          <p className="text-base text-center my-3">©2022-2024 kuramapommel</p>
+        </div>
+      </footer>
+    </div>
   )
 }
 
