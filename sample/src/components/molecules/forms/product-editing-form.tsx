@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useProducts } from '../../../hooks/use-products'
 
 const validationSchema = z.object({
   id: z.number(),
@@ -17,7 +18,6 @@ type Product = z.infer<typeof validationSchema>
 
 type ProductEditingFormProps = {
   initialCurrentProduct: Product
-  handleResponse: (newProduct: Product) => void
   handleCancel: () => void
   afterSubmit: () => void
 }
@@ -33,20 +33,10 @@ const ProductEditingForm: React.FC<ProductEditingFormProps> = (
     resolver: zodResolver(validationSchema),
     defaultValues: props.initialCurrentProduct,
   })
+  const put = useProducts((state) => state.put)
 
-  const handleSaveProduct = (product: Product) => {
-    fetch(`/api/product/${product.id.toString()}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    })
-      .then((response) => response.json())
-      .then((id) => props.handleResponse({ ...product, id }))
-      .catch((error) => console.error('Error adding product:', error))
-    props.afterSubmit()
-  }
+  const handleSaveProduct = (product: Product) =>
+    put(product).then(() => props.afterSubmit())
 
   return (
     <form onSubmit={handleSubmit(handleSaveProduct)}>

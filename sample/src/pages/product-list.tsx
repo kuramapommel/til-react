@@ -44,7 +44,9 @@ type Product = {
 }
 
 const ProductList: React.FC = () => {
-  const { products, pop, remove, put, refresh } = useProducts()
+  const { products, refresh } = useProducts((state) => {
+    return { products: state.products, refresh: state.refresh }
+  })
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -68,7 +70,6 @@ const ProductList: React.FC = () => {
             <div css={styles.dialog}>
               <ProductDeletionForm
                 selectedProduct={productToDelete}
-                handleResponse={remove}
                 handleCancel={() => setIsDeleteDialogOpen(false)}
                 afterSubmit={() => setIsDeleteDialogOpen(false)}
               ></ProductDeletionForm>
@@ -77,10 +78,7 @@ const ProductList: React.FC = () => {
         )}
 
         <FormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <ProductAdditionForm
-            handleResponse={pop}
-            afterSubmit={() => setIsModalOpen(false)}
-          />
+          <ProductAdditionForm afterSubmit={() => setIsModalOpen(false)} />
         </FormModal>
 
         <FormModal
@@ -98,7 +96,6 @@ const ProductList: React.FC = () => {
                 description: '',
               }
             }
-            handleResponse={put}
             handleCancel={() => {
               setIsEditModalOpen(false)
               setCurrentProduct(null)

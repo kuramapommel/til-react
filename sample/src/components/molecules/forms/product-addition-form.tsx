@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useProducts } from '../../../hooks/use-products'
 
 // todo product type は type.ts に切り出して良い
 const validationSchema = z.object({
@@ -17,7 +18,6 @@ const validationSchema = z.object({
 type Product = z.infer<typeof validationSchema>
 
 type ProductAdditionFormProps = {
-  handleResponse: (newProduct: Product) => void
   afterSubmit: () => void
 }
 
@@ -33,23 +33,10 @@ const ProductAdditionForm: React.FC<ProductAdditionFormProps> = (
     resolver: zodResolver(validationSchema),
     defaultValues: { id: 0 },
   })
-  const handleAddProduct = (product: Product) => {
-    fetch('/api/product', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    })
-      .then((response) => response.json())
-      .then((id) => {
-        console.log('response:', id)
-        props.handleResponse({ ...product, id })
-      })
-      .catch((error) => console.error('Error adding product:', error))
+  const pop = useProducts((state) => state.pop)
 
-    props.afterSubmit()
-  }
+  const handleAddProduct = (product: Product) =>
+    pop(product).then(() => props.afterSubmit())
 
   return (
     <form onSubmit={handleSubmit(handleAddProduct)}>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useProducts } from '../../../hooks/use-products'
 
 type Product = {
   id: number
@@ -10,7 +11,6 @@ type Product = {
 
 type ProductDeletionFormProps = {
   selectedProduct: Product
-  handleResponse: (id: number) => void
   handleCancel: () => void
   afterSubmit: () => void
 }
@@ -18,15 +18,11 @@ type ProductDeletionFormProps = {
 const ProductDeletionForm: React.FC<ProductDeletionFormProps> = (
   props: ProductDeletionFormProps,
 ) => {
+  const remove = useProducts((state) => state.remove)
+
   const handleDeleteProduct = (e: React.FormEvent) => {
     e.preventDefault()
-    fetch(`/api/product/${props.selectedProduct.id.toString()}`, {
-      method: 'DELETE',
-    })
-      .then((response) => response.json())
-      .then(props.handleResponse)
-      .catch((error) => console.error('Error deleting product:', error))
-    props.afterSubmit()
+    return remove(props.selectedProduct.id).then(() => props.afterSubmit())
   }
   return (
     <form onSubmit={handleDeleteProduct}>
