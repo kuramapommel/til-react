@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useProducts } from '../../../hooks/use-products'
+import { getAppend } from '../../../reducks/products/selectors'
 
 // todo product type は type.ts に切り出して良い
 const validationSchema = z.object({
@@ -33,10 +34,10 @@ const ProductAdditionForm: React.FC<ProductAdditionFormProps> = (
     resolver: zodResolver(validationSchema),
     defaultValues: { id: 0 },
   })
-  const pop = useProducts((state) => state.pop)
+  const append = useProducts(getAppend)
 
   const handleAddProduct = (product: Product) =>
-    pop(product).then(() => props.afterSubmit())
+    append(product).then(() => props.afterSubmit())
 
   return (
     <form onSubmit={handleSubmit(handleAddProduct)}>

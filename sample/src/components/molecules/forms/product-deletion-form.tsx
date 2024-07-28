@@ -1,5 +1,6 @@
 import React from 'react'
 import { useProducts } from '../../../hooks/use-products'
+import { getRemove } from '../../../reducks/products/selectors'
 
 type Product = {
   id: number
@@ -18,11 +19,12 @@ type ProductDeletionFormProps = {
 const ProductDeletionForm: React.FC<ProductDeletionFormProps> = (
   props: ProductDeletionFormProps,
 ) => {
-  const remove = useProducts((state) => state.remove)
+  const remove = useProducts(getRemove)
 
-  const handleDeleteProduct = (e: React.FormEvent) => {
+  const handleDeleteProduct = async (e: React.FormEvent) => {
     e.preventDefault()
-    return remove(props.selectedProduct.id).then(() => props.afterSubmit())
+    await remove(props.selectedProduct.id)
+    return props.afterSubmit()
   }
   return (
     <form onSubmit={handleDeleteProduct}>

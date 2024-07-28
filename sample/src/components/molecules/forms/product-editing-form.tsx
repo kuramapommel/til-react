@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useProducts } from '../../../hooks/use-products'
+import { getUpdate } from '../../../reducks/products/selectors'
 
 const validationSchema = z.object({
   id: z.number(),
@@ -33,10 +34,10 @@ const ProductEditingForm: React.FC<ProductEditingFormProps> = (
     resolver: zodResolver(validationSchema),
     defaultValues: props.initialCurrentProduct,
   })
-  const put = useProducts((state) => state.put)
+  const update = useProducts(getUpdate)
 
   const handleSaveProduct = (product: Product) =>
-    put(product).then(() => props.afterSubmit())
+    update(product).then(() => props.afterSubmit())
 
   return (
     <form onSubmit={handleSubmit(handleSaveProduct)}>

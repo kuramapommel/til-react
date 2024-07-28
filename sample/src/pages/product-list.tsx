@@ -7,6 +7,7 @@ import ProductEditingForm from '../components/molecules/forms/product-editing-fo
 import FormModal from '../components/molecules/modal/form-modal'
 import ProductDeletionForm from '../components/molecules/forms/product-deletion-form'
 import { useProducts } from '../hooks/use-products'
+import { getProductsAndRefresh } from '../reducks/products/selectors'
 import TenantsTemplate from '../components/templtates/tenants-template'
 
 const styles = {
@@ -44,9 +45,7 @@ type Product = {
 }
 
 const ProductList: React.FC = () => {
-  const { products, refresh } = useProducts((state) => {
-    return { products: state.products, refresh: state.refresh }
-  })
+  const { products, refresh } = useProducts(getProductsAndRefresh)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)

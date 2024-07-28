@@ -2,8 +2,10 @@ import { useEffect } from 'react'
 import { useProducts } from './hooks/use-products'
 import { Link } from 'react-router-dom'
 
+import { getProductsAndRefresh } from './reducks/products/selectors'
+
 function App() {
-  const { products, refresh } = useProducts()
+  const { products, refresh } = useProducts(getProductsAndRefresh)
 
   useEffect(() => {
     refresh()

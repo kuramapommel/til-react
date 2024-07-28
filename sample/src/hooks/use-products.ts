@@ -1,84 +1,38 @@
-import { create } from 'zustand'
+import { create, StateCreator } from 'zustand'
+import {
+  fetchAll,
+  save,
+  create as createProduct,
+  deleteBy,
+} from '../reducks/products/operations'
+import { Product, ProductStore } from '../reducks/products/types'
 
-export type Product = {
-  id: number
-  name: string
-  image: string
-  price: number
-  description: string
-}
-
-type ProductStore = {
-  products: Product[]
-  remove: (id: number) => Promise<void>
-  pop: (product: Product) => Promise<void>
-  put: (newProduct: Product) => Promise<void>
-  refresh: () => Promise<void>
-}
-
-export const useProducts = create<ProductStore>()((set) => ({
+const ProductSlice: StateCreator<ProductStore> = (set) => ({
   products: [],
-  remove: async (id: number) => {
-    const deletedId = await fetch(`/api/product/${id.toString()}`, {
-      method: 'DELETE',
-    })
-      .then((response) => response.json())
-      .then((id) => id)
-      .catch((error) => console.error('Error deleting product:', error))
+  remove: deleteBy((deletedId: number) =>
     set((state) => ({
       products: state.products.filter((product) => product.id !== deletedId),
-    }))
-  },
-  pop: async (product: Product) => {
-    const id = await fetch('/api/product', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    })
-      .then((response) => response.json())
-      .then((id) => id)
-      .catch((error) => {
-        console.error('Error adding product:', error)
-        return 0
-      })
+    })),
+  ),
+  append: createProduct((product: Product) =>
     set((state) => ({
-      products: [...state.products, { ...product, id }],
-    }))
-  },
-  put: async (product: Product) => {
-    const id = await fetch(`/api/product/${product.id.toString()}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    })
-      .then((response) => response.json())
-      .then((id) => id)
-      .catch((error) => {
-        console.error('Error adding product:', error)
-        return 0
-      })
-
+      products: [...state.products, product],
+    })),
+  ),
+  update: save((product: Product) =>
     set((state) => ({
       products: state.products.map((prevProduct) =>
-        prevProduct.id === id ? product : prevProduct,
+        prevProduct.id === product.id ? product : prevProduct,
       ),
-    }))
-  },
-  refresh: async () => {
-    const res = await fetch('/api/products')
-      .then((response) => response.json())
-      .then((data) => data)
-      .catch((error) => {
-        console.error('Error fetching products:', error)
-        return []
-      })
-
+    })),
+  ),
+  refresh: fetchAll((all: Product[]) =>
     set(() => ({
-      products: [...res],
-    }))
-  },
+      products: [...all],
+    })),
+  ),
+})
+
+export const useProducts = create<ProductStore>((...a) => ({
+  ...ProductSlice(...a),
 }))
