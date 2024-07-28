@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const validationSchema = z.object({
+export const validationSchema = z.object({
   id: z.number(),
   name: z.string().min(1, '商品名は必須です'),
   image: z.string().min(1, '商品画像は必須です'),

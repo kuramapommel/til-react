@@ -9,6 +9,7 @@ import ProductDeletionForm from '../components/molecules/forms/product-deletion-
 import { useProducts } from '../hooks/use-products'
 import { getProductsAndRefresh } from '../reducks/products/selectors'
 import TenantsTemplate from '../components/templtates/tenants-template'
+import { Product } from '../reducks/products/types'
 
 const styles = {
   button: css`
@@ -34,14 +35,6 @@ const styles = {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
   `,
-}
-
-type Product = {
-  id: number
-  name: string
-  image: string
-  price: number
-  description: string
 }
 
 const ProductList: React.FC = () => {
