@@ -7,16 +7,16 @@ import ProductList from './pages/product-list'
 import App from './App'
 import { enableMocking } from './testing/mocks'
 
-await enableMocking()
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/products" element={<ProductList />} />
-      </Routes>
-    </Router>
-  </React.StrictMode>,
+enableMocking().then(() =>
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <Router>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/products" element={<ProductList />} />
+        </Routes>
+      </Router>
+    </React.StrictMode>,
+  ),
 )
