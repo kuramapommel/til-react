@@ -6,7 +6,7 @@
 yarn create vite sample --template react-ts
 cd sample
 yarn add react-router-dom @emotion/react @emotion/styled react-hook-form zod @hookform/resolvers zustand
-yarn add -D ts-node eslint prettier eslint-plugin-react eslint-config-prettier eslint-plugin-prettier @types/react-dom tailwindcss postcss autoprefixer @testing-library/react @testing-library/jest-dom @testing-library/dom vite-tsconfig-paths vitest @vitest/ui msw
+yarn add -D ts-node '@typescript-eslint/eslint-plugin@^7.8.0' '@typescript-eslint/parser@^7.8.0' 'eslint@8' prettier eslint-plugin-react eslint-config-prettier eslint-plugin-prettier @types/react-dom tailwindcss postcss autoprefixer @testing-library/react @testing-library/jest-dom @testing-library/dom vite-tsconfig-paths vitest @vitest/ui msw
 ```
 
 開発に使う Service Worker を生成
