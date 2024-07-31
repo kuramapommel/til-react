@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { 
+  env: {
     browser: true,
     es2021: true,
     jest: true,
@@ -12,7 +12,7 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/testing/mocks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -29,5 +29,11 @@ module.exports = {
     ],
     'prettier/prettier': 'error',
     'react/react-in-jsx-scope': 'off',
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 }

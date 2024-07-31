@@ -47,7 +47,7 @@ const ProductList: React.FC = () => {
 
   useEffect(() => {
     refresh()
-  }, [])
+  }, [refresh])
 
   return (
     <TenantsTemplate>

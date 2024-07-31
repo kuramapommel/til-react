@@ -3,8 +3,11 @@ import { css } from '@emotion/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  LoginFormInputs,
+  validationSchema,
+} from '../../../reducks/logins/types'
 
 const formStyle = css`
   width: 100%;
@@ -40,20 +43,7 @@ const buttonStyle = css`
   }
 `
 
-const validationSchema = z.object({
-  username: z
-    .string()
-    .min(1, 'ユーザー名は必須です')
-    .min(4, 'ユーザー名は4文字以上で入力してください'),
-  password: z
-    .string()
-    .min(1, 'パスワードは必須です')
-    .min(8, 'ユーザー名は8文字以上で入力してください'),
-})
-
-type LoginFormInputs = z.infer<typeof validationSchema>
-
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC = React.memo(function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -96,6 +86,6 @@ const LoginForm: React.FC = () => {
       </button>
     </form>
   )
-}
+})
 
-export default React.memo(LoginForm)
+export default LoginForm

@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     refresh()
-  }, [])
+  }, [refresh])
 
   return (
     <div className="flex flex-col min-h-screen">
