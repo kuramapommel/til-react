@@ -21,3 +21,9 @@ Tailwind CSS を扱えるようにする
 ```zsh
 npx tailwindcss init -p
 ```
+
+Storybook を導入する
+
+```zsh
+npx sb init --builder=vite
+```
