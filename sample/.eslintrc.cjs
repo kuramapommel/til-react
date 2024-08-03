@@ -13,7 +13,7 @@ module.exports = {
     'prettier',
     'plugin:storybook/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/testing/mocks'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/testing/mocks', 'src/stories'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
