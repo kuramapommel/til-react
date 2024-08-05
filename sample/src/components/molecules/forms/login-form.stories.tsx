@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import LoginForm from './login-form'
+import LoginForm from '@/components/molecules/forms/login-form'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 const meta: Meta<typeof LoginForm> = {

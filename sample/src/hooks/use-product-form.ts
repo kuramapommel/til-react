@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Product, validationSchema } from '../reducks/products/types'
+import { Product, validationSchema } from '@/reducks/products/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 export const useProductForm = (defaultValues?: Product) => {

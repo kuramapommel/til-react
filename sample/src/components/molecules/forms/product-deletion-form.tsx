@@ -1,7 +1,7 @@
 import React from 'react'
-import { useProducts } from '../../../hooks/use-products'
-import { getRemove } from '../../../reducks/products/selectors'
-import { Product } from '../../../reducks/products/types'
+import { useProducts } from '@/hooks/use-products'
+import { getRemove } from '@/reducks/products/selectors'
+import { Product } from '@/reducks/products/types'
 
 type ProductDeletionFormProps = {
   selectedProduct: Product

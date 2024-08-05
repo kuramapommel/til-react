@@ -1,6 +1,6 @@
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import Login from './login'
+import Login from '@/pages/login'
 import { describe, it, expect, vi } from 'vitest'
 
 describe('Login', () => {

@@ -10,9 +10,9 @@ import {
   beforeEach,
 } from 'vitest'
 import { setupServer } from 'msw/node'
-import Login from './login'
-import ProductList from './product-list'
-import { handlers, resetProducts } from '../testing/mocks/handlers'
+import Login from '@/pages/login'
+import ProductList from '@/pages/product-list'
+import { handlers, resetProducts } from '@/testing/mocks/handlers'
 
 // モックサーバーを設定
 const server = setupServer(...handlers)

@@ -1,4 +1,4 @@
-import { Product } from './types'
+import { Product } from '@/reducks/products/types'
 
 const fetchAll = (dispach: (products: Product[]) => void) => async () => {
   const res = await fetch('/api/products')

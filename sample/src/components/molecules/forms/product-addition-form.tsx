@@ -1,8 +1,8 @@
 import React from 'react'
-import { useProducts } from '../../../hooks/use-products'
-import { getAppend } from '../../../reducks/products/selectors'
-import { Product } from '../../../reducks/products/types'
-import { useProductForm } from '../../../hooks/use-product-form'
+import { useProducts } from '@/hooks/use-products'
+import { getAppend } from '@/reducks/products/selectors'
+import { Product } from '@/reducks/products/types'
+import { useProductForm } from '@/hooks/use-product-form'
 
 type ProductAdditionFormProps = {
   afterSubmit: () => void

@@ -1,8 +1,8 @@
 import React from 'react'
-import { useProducts } from '../../../hooks/use-products'
-import { getUpdate } from '../../../reducks/products/selectors'
-import { useProductForm } from '../../../hooks/use-product-form'
-import { Product } from '../../../reducks/products/types'
+import { useProducts } from '@/hooks/use-products'
+import { getUpdate } from '@/reducks/products/selectors'
+import { useProductForm } from '@/hooks/use-product-form'
+import { Product } from '@/reducks/products/types'
 
 type ProductEditingFormProps = {
   initialCurrentProduct: Product

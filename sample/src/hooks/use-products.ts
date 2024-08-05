@@ -4,8 +4,8 @@ import {
   save,
   create as createProduct,
   deleteBy,
-} from '../reducks/products/operations'
-import { Product, ProductStore } from '../reducks/products/types'
+} from '@/reducks/products/operations'
+import { Product, ProductStore } from '@/reducks/products/types'
 
 const ProductSlice: StateCreator<ProductStore> = (set) => ({
   products: [],

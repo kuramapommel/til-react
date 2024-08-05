@@ -1,4 +1,4 @@
-import { ProductStore } from './types'
+import { ProductStore } from '@/reducks/products/types'
 
 export const getProductsAndRefresh = (state: ProductStore) => {
   return {

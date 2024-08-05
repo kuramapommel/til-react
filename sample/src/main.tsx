@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './index.css'
-import Login from './pages/login'
-import ProductList from './pages/product-list'
-import App from './App'
-import { enableMocking } from './testing/mocks'
+import Login from '@/pages/login'
+import ProductList from '@/pages/product-list'
+import App from '@/App'
+import { enableMocking } from '@/testing/mocks'
 
 enableMocking().then(() =>
   ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -4,10 +4,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  LoginFormInputs,
-  validationSchema,
-} from '../../../reducks/logins/types'
+import { LoginFormInputs, validationSchema } from '@/reducks/logins/types'
 
 const formStyle = css`
   width: 100%;

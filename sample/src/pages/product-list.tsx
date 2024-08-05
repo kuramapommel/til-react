@@ -2,14 +2,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
-import ProductAdditionForm from '../components/molecules/forms/product-addition-form'
-import ProductEditingForm from '../components/molecules/forms/product-editing-form'
-import FormModal from '../components/molecules/modal/form-modal'
-import ProductDeletionForm from '../components/molecules/forms/product-deletion-form'
-import { useProducts } from '../hooks/use-products'
-import { getProductsAndRefresh } from '../reducks/products/selectors'
-import TenantsTemplate from '../components/templtates/tenants-template'
-import { Product } from '../reducks/products/types'
+import ProductAdditionForm from '@/components/molecules/forms/product-addition-form'
+import ProductEditingForm from '@/components/molecules/forms/product-editing-form'
+import FormModal from '@/components/molecules/modal/form-modal'
+import ProductDeletionForm from '@/components/molecules/forms/product-deletion-form'
+import { useProducts } from '@/hooks/use-products'
+import { getProductsAndRefresh } from '@/reducks/products/selectors'
+import TenantsTemplate from '@/components/templtates/tenants-template'
+import { Product } from '@/reducks/products/types'
 
 const styles = {
   button: css`

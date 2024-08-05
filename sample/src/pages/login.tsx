@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Link } from 'react-router-dom'
-import LoginForm from '../components/molecules/forms/login-form'
+import LoginForm from '@/components/molecules/forms/login-form'
 
 const Login = () => {
   return (
