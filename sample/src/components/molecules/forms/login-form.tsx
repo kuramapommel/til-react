@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoginFormInputs, validationSchema } from '@/reducks/logins/types'
+import SubmitButton from '@/components/atoms/buttons/submit-button'
 
 const formStyle = css`
   width: 100%;
@@ -13,6 +14,8 @@ const formStyle = css`
   background: gray;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 `
 
 const inputStyle = css`
@@ -23,21 +26,6 @@ const inputStyle = css`
   border: 1px solid #e2e8f0;
   border-radius: 4px;
   font-size: 1rem;
-`
-
-const buttonStyle = css`
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #3182ce;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2c5282;
-  }
 `
 
 const LoginForm: React.FC = React.memo(function LoginForm() {
@@ -78,9 +66,9 @@ const LoginForm: React.FC = React.memo(function LoginForm() {
         css={inputStyle}
       />
       {errors.password && <p>{errors.password.message}</p>}
-      <button type="submit" disabled={!isValid} css={buttonStyle}>
+      <SubmitButton disabled={!isValid} className="mt-3 ml-auto">
         ログイン
-      </button>
+      </SubmitButton>
     </form>
   )
 })
