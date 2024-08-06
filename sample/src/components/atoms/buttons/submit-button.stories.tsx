@@ -15,6 +15,9 @@ export default meta
 
 type Story = StoryObj<typeof SubmitButton>
 
+/**
+ * 活性化時
+ */
 export const Default: Story = {
   args: {
     children: 'SUBMIT',
@@ -22,6 +25,9 @@ export const Default: Story = {
   },
 }
 
+/**
+ * 非活性化時
+ */
 export const Disabled: Story = {
   args: {
     children: 'SUBMIT',
