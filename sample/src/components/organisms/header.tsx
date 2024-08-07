@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Header = React.memo(function header() {
+const Header: React.FC = React.memo(function Header() {
   return (
     <header className="text-gray-900 border-b border-gray-200">
       <div className="container flex mx-auto p-5 flex-col md:flex-row items-center">
