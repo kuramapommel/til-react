@@ -1,9 +1,9 @@
-import { afterAll, afterEach, beforeAll, expect, test, vi } from 'vitest'
 import { useProducts } from '@/hooks/use-products'
-import { renderHook, waitFor } from '@testing-library/react'
-import { setupServer } from 'msw/node'
 import { handlers, resetProducts } from '@/testing/mocks/handlers'
+import { renderHook, waitFor } from '@testing-library/react'
 import { HttpResponse, http } from 'msw'
+import { setupServer } from 'msw/node'
+import { afterAll, afterEach, beforeAll, expect, test, vi } from 'vitest'
 
 const server = setupServer(...handlers)
 
@@ -16,6 +16,7 @@ afterAll(() => server.close())
 
 test('should fetch and store products correctly', async () => {
   const { result } = renderHook(() => useProducts())
+  throw new Error()
 
   expect(result.current.products).toEqual([])
   result.current.refresh()
