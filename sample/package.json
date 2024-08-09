@@ -13,7 +13,7 @@
     "test:pw": "playwright test",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky"
+    "prepare": "cd .. && husky sample/.husky"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
