@@ -16,7 +16,6 @@ afterAll(() => server.close())
 
 test('should fetch and store products correctly', async () => {
   const { result } = renderHook(() => useProducts())
-  throw new Error()
 
   expect(result.current.products).toEqual([])
   result.current.refresh()
