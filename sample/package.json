@@ -12,7 +12,8 @@
     "test": "vitest",
     "test:pw": "playwright test",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -53,6 +54,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "eslint-plugin-storybook": "^0.8.0",
+    "husky": "^9.1.4",
     "jsdom": "^24.1.0",
     "msw": "^2.3.1",
     "postcss": "^8.4.40",
