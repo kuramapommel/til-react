@@ -1,1 +1,1 @@
- cd sample && yarn test
+ cd sample && yarn && yarn test
