@@ -8,18 +8,16 @@ const config = defineConfig({
   // マルチブラウザテストを行う（追加したいテストブラウザがあればここに追加する）
   projects: [
     {
-      name: 'Pixel 4',
-      use: {
-        browserName: 'chromium',
-        ...devices['Pixel 4'],
-      },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'iPhone 11',
-      use: {
-        browserName: 'webkit',
-        ...devices['iPhone 11'],
-      },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
   ],
 
