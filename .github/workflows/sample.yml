@@ -1,0 +1,40 @@
+name: CI for sample
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "sample/**"
+      - ".github/workflows/sample.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "sample/**"
+      - ".github/workflows/sample.yml"
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sample
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: yarn
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+           run: yarn e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
