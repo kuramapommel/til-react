@@ -22,6 +22,11 @@ const config = defineConfig({
       },
     },
   ],
+
+  webServer: {
+    command: 'yarn dev',
+    port: 3000,
+  },
 })
 
 export default config
