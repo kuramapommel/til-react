@@ -30,12 +30,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: "yarn"
-          # cache-dependency-path: "sample"
+          cache: "yarn"
+          cache-dependency-path: "sample/yarn.lock"
 
       - name: Install dependencies
-        # run: yarn --frozen-lockfile
-        run: npm install
+        run: yarn --frozen-lockfile
 
       - name: Install Playwright
         run: npx playwright install --with-deps
