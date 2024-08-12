@@ -3,16 +3,16 @@ name: CI for sample
 on:
   push:
     branches:
-      - master
-    # paths:
-    #   - "sample/**"
-    #   - ".github/workflows/sample.yml"
+      - main
+    paths:
+      - "sample/**"
+      - ".github/workflows/sample.yml"
   pull_request:
     branches:
-      - master
-    # paths:
-    #   - "sample/**"
-    #   - ".github/workflows/sample.yml"
+      - main
+    paths:
+      - "sample/**"
+      - ".github/workflows/sample.yml"
 
 jobs:
   test:
