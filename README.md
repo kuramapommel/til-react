@@ -5,7 +5,7 @@
 ```zsh
 yarn create vite sample --template react-ts
 cd sample
-yarn add react-router-dom @emotion/react @emotion/styled react-hook-form zod @hookform/resolvers react-admin zustand
+yarn add react-router-dom @emotion/react @emotion/styled zod @hookform/resolvers react-admin zustand
 yarn add -D ts-node '@typescript-eslint/eslint-plugin@^7.8.0' '@typescript-eslint/parser@^7.8.0' 'eslint@8' prettier eslint-plugin-react eslint-config-prettier eslint-plugin-prettier @types/react-dom @types/react-transition-group tailwindcss postcss autoprefixer @testing-library/react @testing-library/jest-dom @testing-library/dom vite-tsconfig-paths vitest @vitest/ui @playwright/test msw husky
 ```
 
