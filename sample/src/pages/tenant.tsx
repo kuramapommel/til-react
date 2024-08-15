@@ -1,5 +1,8 @@
 import {
   Admin,
+  BulkDeleteButton,
+  BulkExportButton,
+  BulkUpdateButton,
   Create,
   CreateResult,
   Datagrid,
@@ -14,7 +17,10 @@ import {
   SimpleForm,
   TextField,
   TextInput,
+  UpdateManyParams,
+  UpdateParams,
   UpdateResult,
+  useRecordContext,
 } from 'react-admin'
 
 type Post = {
@@ -23,7 +29,13 @@ type Post = {
   body: string
 } & RaRecord<string>
 
-let posts: Post[] = []
+let posts: Post[] = [
+  {
+    id: 'id-test',
+    title: 'aaaaaaa',
+    body: 'description',
+  },
+]
 
 const dataProvider: DataProvider = {
   create: (_resource, params) => {
@@ -58,16 +70,17 @@ const dataProvider: DataProvider = {
     Promise.resolve<GetOneResult>({
       data: posts.find((p) => p.id === params.id) || null,
     }),
-  update: (_resource, params) => {
-    const post = posts.find((p) => p.id === params.id)
-    if (!post) return Promise.resolve<UpdateResult>({ data: null })
-
-    const updated = { ...post, ...params.data }
+  update: (_resource, params: UpdateParams<Post>) => {
+    const updated = {
+      ...params.previousData,
+      ...params.data,
+      id: params.previousData.id,
+    }
 
     posts = posts.map((p) => (p.id === params.id ? updated : p))
     return Promise.resolve<UpdateResult>({ data: updated })
   },
-  updateMany: (_resource, params) => {
+  updateMany: (_resource, params: UpdateManyParams<Post>) => {
     const targets = posts.filter((p) => params.ids.includes(p.id))
     if (!targets.length) return Promise.resolve({ data: [] })
 
@@ -80,9 +93,20 @@ const dataProvider: DataProvider = {
   },
 }
 
+const BulkActionButtons = () => (
+  <>
+    <BulkDeleteButton />
+    <BulkExportButton />
+    <BulkUpdateButton
+      label="Reset Title"
+      data={{ title: '' }}
+    ></BulkUpdateButton>
+  </>
+)
+
 const PostList = () => (
   <List>
-    <Datagrid>
+    <Datagrid bulkActionButtons={<BulkActionButtons />}>
       <TextField source="id" />
       <TextField source="title" />
       <TextField source="body" />
@@ -91,8 +115,13 @@ const PostList = () => (
   </List>
 )
 
+const PostTitle = () => {
+  const record = useRecordContext()
+  return <span>Post {record ? `"${record.title}"` : ''}</span>
+}
+
 export const PostEdit = () => (
-  <Edit title="Edit a Post">
+  <Edit title={<PostTitle />}>
     <SimpleForm>
       <TextInput disabled source="id" />
       <TextInput source="title" />
