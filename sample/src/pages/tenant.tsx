@@ -1,4 +1,5 @@
-import { Post } from '@/reducks/posts/types'
+import { Post, validationSchema } from '@/reducks/posts/types'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Admin,
   BulkDeleteButton,
@@ -86,6 +87,7 @@ const dataProvider: DataProvider = {
     return Promise.resolve({ data: updateds as [] })
   },
 }
+const validationResolver = zodResolver(validationSchema)
 
 const BulkActionButtons = () => (
   <>
@@ -110,13 +112,13 @@ const PostList = () => (
 )
 
 const PostTitle = () => {
-  const record = useRecordContext()
-  return <span>Post {record ? `"${record.title}"` : ''}</span>
+  const record = useRecordContext<Post>()
+  return <span>Post {record ? `"${record.id}"` : ''}</span>
 }
 
 export const PostEdit = () => (
   <Edit title={<PostTitle />}>
-    <SimpleForm>
+    <SimpleForm resolver={validationResolver} mode="onBlur">
       <TextInput disabled source="id" />
       <TextInput source="title" />
       <TextInput source="body" />
@@ -126,7 +128,7 @@ export const PostEdit = () => (
 
 const PostCreate = () => (
   <Create title="Create a Post">
-    <SimpleForm>
+    <SimpleForm resolver={validationResolver} mode="onBlur">
       <TextInput source="title" />
       <TextInput source="body" />
     </SimpleForm>
