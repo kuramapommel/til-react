@@ -1,3 +1,4 @@
+import { Post } from '@/reducks/posts/types'
 import {
   Admin,
   BulkDeleteButton,
@@ -12,7 +13,6 @@ import {
   EditButton,
   GetOneResult,
   List,
-  RaRecord,
   Resource,
   SimpleForm,
   TextField,
@@ -22,12 +22,6 @@ import {
   UpdateResult,
   useRecordContext,
 } from 'react-admin'
-
-type Post = {
-  id: string
-  title: string
-  body: string
-} & RaRecord<string>
 
 let posts: Post[] = [
   {
