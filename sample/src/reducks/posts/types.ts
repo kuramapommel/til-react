@@ -9,4 +9,4 @@ export const validationSchema = z.object({
     message: '記事内容は必須です',
   }),
 })
-export type Post = z.infer<typeof validationSchema> & RaRecord<string>
+export type Post = Readonly<z.infer<typeof validationSchema> & RaRecord<string>>

@@ -10,7 +10,7 @@ export const validationSchema = z.object({
     .positive('価格は正の値で入力してください'),
   description: z.string(),
 })
-export type Product = z.infer<typeof validationSchema>
+export type Product = Readonly<z.infer<typeof validationSchema>>
 
 export type ProductStore = {
   products: Product[]
