@@ -1,19 +1,9 @@
+import { range } from '@/libs/arrays'
+import { Room } from '@/reducks/reservations/types'
 import React from 'react'
-
-type Room = {
-  id: string
-  name: string
-  availables: boolean[]
-}
 
 type Props = {
   rooms: Room[]
-}
-
-function* range(start: number, end: number) {
-  for (let i = start; i < end; i++) {
-    yield i
-  }
 }
 
 const TimeListTable = React.memo(function TimeListTable(props: Props) {

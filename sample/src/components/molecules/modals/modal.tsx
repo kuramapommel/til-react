@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 type Props = {
   isOpen: boolean
@@ -22,19 +23,23 @@ const Modal = React.memo(function Modal({
 
   return (
     <>
-      <dialog
-        ref={dialogRef}
-        className="min-w-96 bg-white border-none rounded-md"
-        onClose={onCancel}
-        onClick={onCancel}
-      >
-        <div
-          className="flex flex-col justify-center p-0 m-0"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {children}
-        </div>
-      </dialog>
+      {isOpen &&
+        createPortal(
+          <dialog
+            ref={dialogRef}
+            className="min-w-96 bg-white border-none rounded-md"
+            onClose={onCancel}
+            onClick={onCancel}
+          >
+            <div
+              className="flex flex-col justify-center p-0 m-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {children}
+            </div>
+          </dialog>,
+          document.body,
+        )}
     </>
   )
 })

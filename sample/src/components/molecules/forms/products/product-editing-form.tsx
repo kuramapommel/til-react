@@ -1,16 +1,19 @@
-import React from 'react'
+import { useProductForm } from '@/hooks/use-product-form'
 import { useProducts } from '@/hooks/use-products'
 import { getUpdate } from '@/reducks/products/selectors'
-import { useProductForm } from '@/hooks/use-product-form'
 import { Product } from '@/reducks/products/types'
+import React from 'react'
 
-type ProductEditingFormProps = {
+type Props = {
   initialCurrentProduct: Product
   handleCancel: () => void
   afterSubmit: () => void
 }
-const ProductEditingForm: React.FC<ProductEditingFormProps> = React.memo(
-  function ProductEditingForm(props: ProductEditingFormProps) {
+const ProductEditingForm: React.FC<Props> = React.memo(
+  function ProductEditingForm(props: Props) {
+    console.log(
+      `initialCurrentProduct: ${JSON.stringify(props.initialCurrentProduct)}`,
+    )
     const {
       register,
       handleSubmit,
@@ -18,8 +21,10 @@ const ProductEditingForm: React.FC<ProductEditingFormProps> = React.memo(
     } = useProductForm(props.initialCurrentProduct)
     const update = useProducts(getUpdate)
 
-    const handleSaveProduct = (product: Product) =>
-      update(product).then(() => props.afterSubmit())
+    const handleSaveProduct = (product: Product) => {
+      console.log(`update product: ${JSON.stringify(product)}`)
+      return update(product).then(() => props.afterSubmit())
+    }
 
     return (
       <form onSubmit={handleSubmit(handleSaveProduct)}>

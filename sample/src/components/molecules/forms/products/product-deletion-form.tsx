@@ -1,16 +1,16 @@
-import React from 'react'
 import { useProducts } from '@/hooks/use-products'
 import { getRemove } from '@/reducks/products/selectors'
 import { Product } from '@/reducks/products/types'
+import React from 'react'
 
-type ProductDeletionFormProps = {
+type Props = {
   selectedProduct: Product
   handleCancel: () => void
   afterSubmit: () => void
 }
 
-const ProductDeletionForm: React.FC<ProductDeletionFormProps> = React.memo(
-  function ProductDeletionForm(props: ProductDeletionFormProps) {
+const ProductDeletionForm: React.FC<Props> = React.memo(
+  function ProductDeletionForm(props: Props) {
     const remove = useProducts(getRemove)
 
     const handleDeleteProduct = async (e: React.FormEvent) => {

@@ -19,6 +19,10 @@ type Story = StoryObj<typeof Modal>
 
 /**
  * 「開く」ボタン押下でモーダル展開時の挙動を確認することができます
+ *
+ * [dialog](https://developer.mozilla.org/ja/docs/Web/HTML/Element/dialog) 要素を使用して実装しています <br>
+ * [createPortal](https://ja.react.dev/reference/react-dom/createPortal) を使用して、body 直下にレンダリングされるようにしています <br>
+ * isOpen が false のときはレンダリングしません <br>
  */
 export const Default: Story = {
   render: () => {

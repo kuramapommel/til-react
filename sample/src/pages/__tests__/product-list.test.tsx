@@ -1,24 +1,44 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import {
-  describe,
-  it,
-  expect,
-  beforeAll,
-  afterEach,
-  afterAll,
-  beforeEach,
-} from 'vitest'
-import { setupServer } from 'msw/node'
 import Login from '@/pages/login'
 import ProductList from '@/pages/product-list'
 import { handlers, resetProducts } from '@/testing/mocks/handlers'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { setupServer } from 'msw/node'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 // モックサーバーを設定
 const server = setupServer(...handlers)
 
 // モックサーバーを起動および停止
-beforeAll(() => server.listen())
+beforeAll(() => {
+  server.listen()
+  HTMLDialogElement.prototype.show = vi.fn(function mock(
+    this: HTMLDialogElement,
+  ) {
+    this.open = true
+  })
+
+  HTMLDialogElement.prototype.showModal = vi.fn(function mock(
+    this: HTMLDialogElement,
+  ) {
+    this.open = true
+  })
+
+  HTMLDialogElement.prototype.close = vi.fn(function mock(
+    this: HTMLDialogElement,
+  ) {
+    this.open = false
+  })
+})
 afterEach(() => {
   resetProducts()
   server.resetHandlers()
@@ -47,16 +67,16 @@ describe('Login', () => {
     fireEvent.submit(loginButton)
 
     // Wait for navigation
-    expect(await screen.findByText(/product list/i)).toBeInTheDocument()
+    expect(await screen.findByText('Product List')).toBeInTheDocument()
   })
 })
 
 describe('ProductList', () => {
   beforeEach(() => {
     render(
-      <MemoryRouter initialEntries={['/products']}>
+      <MemoryRouter initialEntries={['/']}>
         <Routes>
-          <Route path="/products" element={<ProductList />} />
+          <Route path="/" element={<ProductList />} />
         </Routes>
       </MemoryRouter>,
     )
@@ -98,6 +118,9 @@ describe('ProductList', () => {
 
     expect(await screen.findByText('Product 3')).toBeInTheDocument()
     expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Description for product 3'),
+    ).toBeInTheDocument()
   })
 
   it('should open edit modal when clicking on "編集ボタン" and save changes', async () => {

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
+import LoginForm from '@/components/molecules/forms/logins/login-form'
 import { Link } from 'react-router-dom'
-import LoginForm from '@/components/molecules/forms/login-form'
 
 const Login = () => {
   return (
@@ -23,7 +23,7 @@ const Login = () => {
 
       <main className="text-gray-900 border-b border-gray-200 flex-grow">
         <div className="container flex mx-auto p-5 flex-col items-center">
-          <LoginForm />{' '}
+          <LoginForm />
         </div>
       </main>
 

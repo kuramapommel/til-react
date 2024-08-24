@@ -1,10 +1,10 @@
 // ProductList.tsx
 /** @jsxImportSource @emotion/react */
-import ProductAdditionForm from '@/components/molecules/forms/product-addition-form'
-import ProductDeletionForm from '@/components/molecules/forms/product-deletion-form'
-import ProductEditingForm from '@/components/molecules/forms/product-editing-form'
-import FormModal from '@/components/molecules/modals/form-modal'
-import TenantsTemplate from '@/components/templtates/tenants-template'
+import ProductAdditionForm from '@/components/molecules/forms/products/product-addition-form'
+import ProductDeletionForm from '@/components/molecules/forms/products/product-deletion-form'
+import ProductEditingForm from '@/components/molecules/forms/products/product-editing-form'
+import Modal from '@/components/molecules/modals/modal'
+import TenantsTemplate from '@/components/templates/tenants-template'
 import { useProducts } from '@/hooks/use-products'
 import { getProductsAndRefresh } from '@/reducks/products/selectors'
 import { Product } from '@/reducks/products/types'
@@ -51,80 +51,79 @@ const ProductList: React.FC = () => {
 
   return (
     <TenantsTemplate>
-      <>
-        <h2>Product List</h2>
-        <button css={styles.button} onClick={() => setIsModalOpen(true)}>
-          新規作成
-        </button>
+      <h2>Product List</h2>
+      <button css={styles.button} onClick={() => setIsModalOpen(true)}>
+        新規作成
+      </button>
 
-        {isDeleteDialogOpen && productToDelete && (
-          <div css={styles.overlay}>
-            <div css={styles.dialog}>
-              <ProductDeletionForm
-                selectedProduct={productToDelete}
-                handleCancel={() => setIsDeleteDialogOpen(false)}
-                afterSubmit={() => setIsDeleteDialogOpen(false)}
-              ></ProductDeletionForm>
-            </div>
+      {isDeleteDialogOpen && productToDelete && (
+        <div css={styles.overlay}>
+          <div css={styles.dialog}>
+            <ProductDeletionForm
+              selectedProduct={productToDelete}
+              handleCancel={() => setIsDeleteDialogOpen(false)}
+              afterSubmit={() => setIsDeleteDialogOpen(false)}
+            />
           </div>
-        )}
+        </div>
+      )}
 
-        <FormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <ProductAdditionForm afterSubmit={() => setIsModalOpen(false)} />
-        </FormModal>
+      <Modal isOpen={isModalOpen} onCancel={() => setIsModalOpen(false)}>
+        <ProductAdditionForm afterSubmit={() => setIsModalOpen(false)} />
+      </Modal>
 
-        <FormModal
-          isOpen={isEditModalOpen && !!currentProduct}
-          onClose={() => setIsEditModalOpen(false)}
-        >
-          <ProductEditingForm
-            initialCurrentProduct={
-              // todo これはあまりにナンセンスなので、必ず修正する
-              currentProduct || {
-                id: 0,
-                name: '',
-                image: '',
-                price: 0,
-                description: '',
-              }
+      <Modal
+        isOpen={isEditModalOpen && !!currentProduct}
+        onCancel={() => setIsEditModalOpen(false)}
+      >
+        <ProductEditingForm
+          initialCurrentProduct={
+            // todo これはあまりにナンセンスなので、必ず修正する
+            currentProduct || {
+              id: 0,
+              name: '',
+              image: '',
+              price: 0,
+              description: '',
             }
-            handleCancel={() => {
-              setIsEditModalOpen(false)
-              setCurrentProduct(null)
-            }}
-            afterSubmit={() => {
-              setIsEditModalOpen(false)
-              setCurrentProduct(null)
-            }}
-          />
-        </FormModal>
-        <ul>
-          {products.map((product) => (
-            <li key={product.id}>
-              <h2>{product.name}</h2>
-              <img src={product.image} alt={product.name} />
-              <p>価格: {product.price.toLocaleString()}円</p>
-              <p>{product.description}</p>
-              <button
-                onClick={() => {
-                  setCurrentProduct(product)
-                  setIsEditModalOpen(true)
-                }}
-              >
-                編集
-              </button>
-              <button
-                onClick={() => {
-                  setProductToDelete(product)
-                  setIsDeleteDialogOpen(true)
-                }}
-              >
-                削除
-              </button>
-            </li>
-          ))}
-        </ul>
-      </>
+          }
+          handleCancel={() => {
+            setIsEditModalOpen(false)
+            setCurrentProduct(null)
+          }}
+          afterSubmit={() => {
+            setIsEditModalOpen(false)
+            setCurrentProduct(null)
+          }}
+        />
+      </Modal>
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>
+            <h2>{product.name}</h2>
+            <img src={product.image} alt={product.name} />
+            <p>価格: {product.price.toLocaleString()}円</p>
+            <p>{product.description}</p>
+            <button
+              onClick={() => {
+                console.log(`product: ${JSON.stringify(product)}`)
+                setCurrentProduct(product)
+                setIsEditModalOpen(true)
+              }}
+            >
+              編集
+            </button>
+            <button
+              onClick={() => {
+                setProductToDelete(product)
+                setIsDeleteDialogOpen(true)
+              }}
+            >
+              削除
+            </button>
+          </li>
+        ))}
+      </ul>
     </TenantsTemplate>
   )
 }
