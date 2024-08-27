@@ -4,6 +4,7 @@ import { useDataProvider } from './hooks/use-data-provider'
 import Login from './pages/login'
 import ProductList from './pages/product-list'
 import Tenant from './pages/tenant'
+import NotFoundPage from './pages/404'
 
 const Routes = () => {
   const dataProvider = useDataProvider()
@@ -17,6 +18,7 @@ const Routes = () => {
         path="/tenant/*"
         element={<Tenant dataProvider={dataProvider} />}
       />
+      <Route path="*" element={<NotFoundPage />} />
     </RrdRoutes>
   )
 }
