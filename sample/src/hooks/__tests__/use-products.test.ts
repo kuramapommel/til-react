@@ -36,6 +36,27 @@ test('should fetch and store products correctly', async () => {
         price: 2000,
         description: 'Description for product 2',
       },
+      {
+        id: 3,
+        name: 'Product 3',
+        image: 'https://placehold.jp/3d4070/ffffff/150x150.png',
+        price: 2500,
+        description: 'Description for product 2',
+      },
+      {
+        id: 4,
+        name: 'Product 4',
+        image: 'https://placehold.jp/3d4070/ffffff/150x150.png',
+        price: 3000,
+        description: 'Description for product 2',
+      },
+      {
+        id: 5,
+        name: 'Product 5',
+        image: 'https://placehold.jp/3d4070/ffffff/150x150.png',
+        price: 10000,
+        description: 'Description for product 2',
+      },
     ])
   })
 })

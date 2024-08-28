@@ -13,8 +13,14 @@ const Modal = React.memo(function Modal({
   onCancel,
 }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const open = useCallback(() => dialogRef.current?.showModal(), [])
-  const close = useCallback(() => dialogRef.current?.close(), [])
+  const open = useCallback(() => {
+    dialogRef.current?.showModal()
+    document.body.classList?.add('overflow-hidden')
+  }, [])
+  const close = useCallback(() => {
+    dialogRef.current?.close()
+    document.body.classList?.remove('overflow-hidden')
+  }, [])
 
   useEffect(() => {
     const switchOpenClose = isOpen ? open : close
@@ -32,7 +38,7 @@ const Modal = React.memo(function Modal({
             onClick={onCancel}
           >
             <div
-              className="flex flex-col justify-center p-0 m-0"
+              className="flex flex-col justify-center p-0 m-0 overscroll-contain"
               onClick={(e) => e.stopPropagation()}
             >
               {children}

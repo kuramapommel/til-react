@@ -85,8 +85,14 @@ describe('ProductList', () => {
   it('should display a list of products with their properties', async () => {
     expect(await screen.findByText('Product 1')).toBeInTheDocument()
     expect(await screen.findByText('Product 2')).toBeInTheDocument()
+    expect(await screen.findByText('Product 3')).toBeInTheDocument()
+    expect(await screen.findByText('Product 4')).toBeInTheDocument()
+    expect(await screen.findByText('Product 5')).toBeInTheDocument()
     expect(await screen.findByText('価格: 1,000円')).toBeInTheDocument()
     expect(await screen.findByText('価格: 2,000円')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 2,500円')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 10,000円')).toBeInTheDocument()
   })
 
   it('should open modal when clicking on "新規作成ボタン" and add a new product', async () => {
@@ -101,10 +107,10 @@ describe('ProductList', () => {
 
     await waitFor(() => {
       fireEvent.input(screen.getByLabelText('商品名'), {
-        target: { value: 'Product 3' },
+        target: { value: 'Product 100' },
       })
       fireEvent.input(screen.getByLabelText('商品単価'), {
-        target: { value: 3000 },
+        target: { value: 100 },
       })
       fireEvent.input(screen.getByLabelText('詳細'), {
         target: { value: 'Description for product 3' },
@@ -116,8 +122,8 @@ describe('ProductList', () => {
     expect(submitButton).toBeEnabled()
     fireEvent.submit(submitButton)
 
-    expect(await screen.findByText('Product 3')).toBeInTheDocument()
-    expect(await screen.findByText('価格: 3,000円')).toBeInTheDocument()
+    expect(await screen.findByText('Product 100')).toBeInTheDocument()
+    expect(await screen.findByText('価格: 100円')).toBeInTheDocument()
     expect(
       await screen.findByText('Description for product 3'),
     ).toBeInTheDocument()
