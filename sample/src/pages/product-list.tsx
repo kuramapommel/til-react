@@ -4,6 +4,7 @@ import ProductAdditionForm from '@/components/molecules/forms/products/product-a
 import ProductDeletionForm from '@/components/molecules/forms/products/product-deletion-form'
 import ProductEditingForm from '@/components/molecules/forms/products/product-editing-form'
 import Modal from '@/components/molecules/modals/modal'
+import BulkImportButton from '@/components/organisms/products/bulk-import-button'
 import TenantsTemplate from '@/components/templates/tenants-template'
 import { useProducts } from '@/hooks/use-products'
 import { getProductsAndRefresh } from '@/reducks/products/selectors'
@@ -55,6 +56,7 @@ const ProductList: React.FC = () => {
       <button css={styles.button} onClick={() => setIsModalOpen(true)}>
         新規作成
       </button>
+      <BulkImportButton />
 
       {isDeleteDialogOpen && productToDelete && (
         <div css={styles.overlay}>
