@@ -5,12 +5,13 @@ import ProductDeletionForm from '@/components/molecules/forms/products/product-d
 import ProductEditingForm from '@/components/molecules/forms/products/product-editing-form'
 import Modal from '@/components/molecules/modals/modal'
 import BulkImportButton from '@/components/organisms/products/bulk-import-button'
+import DropZone from '@/components/organisms/products/dropzone'
 import TenantsTemplate from '@/components/templates/tenants-template'
 import { useProducts } from '@/hooks/use-products'
 import { getProductsAndRefresh } from '@/reducks/products/selectors'
 import { Product } from '@/reducks/products/types'
 import { css } from '@emotion/react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const styles = {
   button: css`
@@ -45,6 +46,7 @@ const ProductList: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+  const [file, setFile] = useState<File | null>(null)
 
   useEffect(() => {
     refresh()
@@ -57,6 +59,7 @@ const ProductList: React.FC = () => {
         新規作成
       </button>
       <BulkImportButton />
+      <DropZone file={file} setFile={setFile} />
 
       {isDeleteDialogOpen && productToDelete && (
         <div css={styles.overlay}>
