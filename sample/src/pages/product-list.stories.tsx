@@ -1,5 +1,6 @@
 import ProductList from '@/pages/product-list'
 import type { Meta, StoryObj } from '@storybook/react'
+import { userEvent, within } from '@storybook/test'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 const meta: Meta<typeof ProductList> = {
@@ -28,5 +29,19 @@ export const Default: Story = {
         </Routes>
       </MemoryRouter>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const deleteButton = (
+      await canvas.findAllByRole('button', { name: '削除' })
+    )[0]
+    await userEvent.click(deleteButton)
+
+    const confirmButton = (
+      await canvas.findAllByRole('button', { name: '削除する' })
+    )[0]
+
+    await userEvent.click(confirmButton)
   },
 }
