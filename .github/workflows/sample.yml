@@ -39,14 +39,11 @@ jobs:
       - name: Run Unit Tests
         run: yarn test
 
-      - name: Run Storybook
-        run: yarn storybook
-
-      - name: Run Storybook Tests
-        run: yarn storybook:test
-
       - name: Install Playwright
         run: npx playwright install --with-deps
+
+      - name: Run Storybook Tests
+        run: yarn storybook:ci
 
       - name: Run Playwright tests
         run: npm run e2e
