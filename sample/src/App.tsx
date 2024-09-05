@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useProducts } from '@/hooks/use-products'
 import { Link } from 'react-router-dom'
 
@@ -6,6 +6,7 @@ import { getProductsAndRefresh } from '@/reducks/products/selectors'
 
 function App() {
   const { products, refresh } = useProducts(getProductsAndRefresh)
+  const [isSideOpen, setIsSideOpen] = useState(false)
 
   useEffect(() => {
     refresh()
@@ -29,30 +30,42 @@ function App() {
         </div>
       </header>
 
-      <main className="text-gray-900 border-b border-gray-200 flex-grow">
-        <div className="container flex mx-auto p-5 flex-col items-center">
-          <h1 className="text-3xl md:text-5xl">商品一覧</h1>
-          <div>
-            <ul className="flex flex-col md:flex-row">
-              {products.map((product) => (
-                <li key={product.id} className="mx-5 mt-5 w-[200px]">
-                  <h2 className="text-center text-lg md:text-xl">
-                    {product.name}
-                  </h2>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="mx-auto mt-2"
-                  />
-                  <p className="text-center text-base mt-2">
-                    価格: {product.price.toLocaleString()}円
-                  </p>
-                  <p className="text-base mt-1">{product.description}</p>
-                </li>
-              ))}
-            </ul>
+      <main
+        className={`text-gray-900 border-b border-gray-200 flex-grow flex relative ${isSideOpen ? 'translate-x-[-300px]' : ''}`}
+      >
+        <div className="flex w-screen">
+          <div className="container flex mx-auto p-5 flex-col items-center">
+            <h1 className="text-3xl md:text-5xl">商品一覧</h1>
+            <div>
+              <ul className="flex flex-col md:flex-row">
+                {products.map((product) => (
+                  <li key={product.id} className="mx-5 mt-5 w-[200px]">
+                    <h2
+                      className="text-center text-lg md:text-xl"
+                      onClick={() => setIsSideOpen(true)}
+                    >
+                      {product.name}
+                    </h2>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="mx-auto mt-2"
+                    />
+                    <p className="text-center text-base mt-2">
+                      価格: {product.price.toLocaleString()}円
+                    </p>
+                    <p className="text-base mt-1">{product.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
+
+        <aside
+          className={`w-[300px] bg-green-400 min-h-full fixed right-[-300px]`}
+          onClick={() => setIsSideOpen(false)}
+        />
       </main>
 
       <footer className="min-h-12">
