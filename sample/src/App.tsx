@@ -7,6 +7,7 @@ import { getProductsAndRefresh } from '@/reducks/products/selectors'
 function App() {
   const { products, refresh } = useProducts(getProductsAndRefresh)
   const [isSideOpen, setIsSideOpen] = useState(false)
+  const [productName, setProductName] = useState('')
 
   useEffect(() => {
     refresh()
@@ -31,9 +32,9 @@ function App() {
       </header>
 
       <main
-        className={`text-gray-900 border-b border-gray-200 flex-grow flex relative ${isSideOpen ? 'translate-x-[-300px]' : ''}`}
+        className={`text-gray-900 flex-grow flex relative ${isSideOpen ? 'translate-x-[-300px]' : ''}`}
       >
-        <div className="flex w-screen">
+        <div className="flex w-screen ">
           <div className="container flex mx-auto p-5 flex-col items-center">
             <h1 className="text-3xl md:text-5xl">商品一覧</h1>
             <div>
@@ -42,7 +43,10 @@ function App() {
                   <li key={product.id} className="mx-5 mt-5 w-[200px]">
                     <h2
                       className="text-center text-lg md:text-xl"
-                      onClick={() => setIsSideOpen(true)}
+                      onClick={() => {
+                        setIsSideOpen(true)
+                        setProductName(product.name)
+                      }}
                     >
                       {product.name}
                     </h2>
@@ -63,12 +67,14 @@ function App() {
         </div>
 
         <aside
-          className={`w-[300px] bg-green-400 min-h-full fixed right-[-300px]`}
+          className={`w-[300px] border-l-2 border-gray-200 min-h-full fixed right-[-300px]`}
           onClick={() => setIsSideOpen(false)}
-        />
+        >
+          <h3 className="text-center mt-4 text-2xl ">{productName}</h3>
+        </aside>
       </main>
 
-      <footer className="min-h-12">
+      <footer className="min-h-12 border-t border-gray-200">
         <div className="container mx-auto">
           <p className="text-base text-center my-3">©2022-2024 kuramapommel</p>
         </div>
