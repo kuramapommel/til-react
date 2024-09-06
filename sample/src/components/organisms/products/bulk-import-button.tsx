@@ -4,7 +4,13 @@ import { validationSchema } from '@/reducks/products/types'
 import React, { ChangeEvent, useCallback } from 'react'
 import { z } from 'zod'
 
-const BulkImportButton = React.memo(function BulkImportButton() {
+type Props = {
+  acceptedFile?: File
+}
+
+const BulkImportButton = React.memo(function BulkImportButton({
+  acceptedFile,
+}: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const onChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -15,8 +21,13 @@ const BulkImportButton = React.memo(function BulkImportButton() {
   }, [])
 
   const upload = useCallback(() => {
+    if (acceptedFile) {
+      alert(JSON.stringify(acceptedFile))
+      // todo ファイルが登録されている場合はそのままアップロードする
+      return
+    }
     inputRef.current?.click()
-  }, [])
+  }, [acceptedFile])
 
   return (
     <div>
