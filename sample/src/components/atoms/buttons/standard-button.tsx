@@ -13,7 +13,7 @@ const StandardButton = React.memo(function StandardButton({
   disabled = false,
   classes = [],
 }: Props) {
-  const style = `text-xl min-w-28 bg-green-600 text-white p-2 border-none rounded-md cursor-pointer ${disabled ? 'opacity-50' : 'hover:bg-green-700'} mx-auto${classes.map((className) => ` ${className}`)}`
+  const style = `text-xl min-w-28 bg-green-600 text-white p-2 border-none rounded-md cursor-pointer ${disabled ? 'opacity-50' : 'hover:bg-green-700'} mx-auto${classes.map((className) => ` ${className}`).join('')}`
 
   return (
     <button
